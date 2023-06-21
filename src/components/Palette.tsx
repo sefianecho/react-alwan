@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { POINTER_MOVE, POINTER_UP, ROOT } from '../constants';
+import { KEYBOARD_X, KEYBOARD_Y, POINTER_MOVE, POINTER_UP, ROOT } from '../constants';
 import { getBounds, translate } from '../utils/dom';
 import { boundNumber } from '../utils/math';
 import { createPortal } from 'react-dom';
@@ -40,6 +40,22 @@ const Palette = () => {
         },
         []
     );
+
+    /**
+     * Moves marker using keyboard arrow keys.
+     *
+     * @param e - Keyboard event.
+     */
+    const handleKeyboard = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        const key = e.key;
+        const x = KEYBOARD_X[key] || 0;
+        const y = KEYBOARD_Y[key] || 0;
+
+        if (x || y) {
+            e.preventDefault();
+            moveMarker(null, { x, y });
+        }
+    };
 
     /**
      * Starts dragging the marker.
@@ -87,6 +103,7 @@ const Palette = () => {
                 className='alwan__palette'
                 tabIndex={0}
                 onPointerDown={dragStart}
+                onKeyDown={handleKeyboard}
                 ref={paletteElement}
             >
                 <div className='alwan__marker' ref={markerElement}></div>
