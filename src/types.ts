@@ -40,6 +40,13 @@ export interface alwanProps {
      * @default true
      */
     copy: boolean;
+
+    /**
+     * Support alpha channel and display opacity slider.
+     *
+     * @default true
+     */
+    opacity: boolean;
 }
 
 export interface RGB {
@@ -89,4 +96,8 @@ export interface buttonProps extends React.PropsWithChildren {
 export interface utilityProps {
     copy: boolean;
     preview: boolean;
+}
+
+export interface slidersProps {
+    opacity: boolean;
 }

@@ -16,6 +16,7 @@ const Alwan = ({
     toggle = true,
     preview = true,
     copy = true,
+    opacity = true,
 }: alwanProps) => {
     const [isOpen, setOpen] = useState(false);
     const [color, setColor] = useState<colorState>({
@@ -50,7 +51,7 @@ const Alwan = ({
                 <Palette />
                 <Container>
                     <Utility preview={preview} copy={copy} />
-                    <Sliders />
+                    <Sliders opacity={opacity} />
                 </Container>
                 <Inputs />
                 <Swatches />
