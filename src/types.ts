@@ -26,6 +26,20 @@ export interface alwanProps {
      * @default true
      */
     toggle: boolean;
+
+    /**
+     * Preview the color.
+     *
+     * @default true
+     */
+    preview: boolean;
+
+    /**
+     * Add/Remove a copy button.
+     *
+     * @default true
+     */
+    copy: boolean;
 }
 
 export interface RGB {
@@ -70,4 +84,9 @@ export interface buttonProps extends React.PropsWithChildren {
     onBlur?: () => void;
     disabled?: boolean;
     style?: React.CSSProperties;
+}
+
+export interface utilityProps {
+    copy: boolean;
+    preview: boolean;
 }
