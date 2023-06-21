@@ -1,16 +1,17 @@
 import { caretSVG } from '../assets/svg/icons';
+import Button from './Button';
 
 const Swatches = () => {
     return (
         <>
             <div className='alwan__swatches'>
-                <button type='button' className='alwan__swatch'></button>
-                <button type='button' className='alwan__swatch'></button>
-                <button type='button' className='alwan__swatch'></button>
+                <Button className='alwan__swatch' />
+                <Button className='alwan__swatch' />
+                <Button className='alwan__swatch' />
+                <Button className='alwan__swatch' />
             </div>
-            <button type='button' className='alwan__button alwan__toggle-button'>
-                {caretSVG}
-            </button>
+
+            <Button className='alwan__toggle-button'>{caretSVG}</Button>
         </>
     );
 };

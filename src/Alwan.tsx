@@ -7,6 +7,7 @@ import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
 import type { colorState } from './types';
+import Button from './components/Button';
 
 const Alwan = () => {
     const [color, setColor] = useState<colorState>({
@@ -26,7 +27,7 @@ const Alwan = () => {
 
     return (
         <>
-            <button type='button' className='alwan__button alwan__preset-button'></button>
+            <Button className='alwan__preset-button' />
             <div className='alwan'>
                 <Palette />
                 <Container>

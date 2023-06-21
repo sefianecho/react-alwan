@@ -32,3 +32,12 @@ export type DOMRectArray = [
     right: number,
     bottom: number
 ];
+
+export interface buttonProps extends React.PropsWithChildren {
+    className?: string;
+    onClick?: (ev: React.MouseEvent) => void;
+    onMouseLeave?: (ev: React.MouseEvent) => void;
+    onBlur?: () => void;
+    disabled?: boolean;
+    style?: React.CSSProperties;
+}

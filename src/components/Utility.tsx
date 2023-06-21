@@ -1,11 +1,10 @@
 import { clipboardSVG } from '../assets/svg/icons';
+import Button from './Button';
 
 const Utility = () => {
     return (
         <div className='alwan__preview'>
-            <button type='button' className='alwan__button alwan__copy-button'>
-                {clipboardSVG}
-            </button>
+            <Button className='alwan__copy-button'>{clipboardSVG}</Button>
         </div>
     );
 };

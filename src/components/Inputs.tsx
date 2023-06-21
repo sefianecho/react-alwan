@@ -1,4 +1,5 @@
 import { switchInputsSVG } from '../assets/svg/icons';
+import Button from './Button';
 import Container from './Container';
 
 const Inputs = () => {
@@ -22,9 +23,7 @@ const Inputs = () => {
                     <span>a</span>
                 </label>
             </div>
-            <button type='button' className='alwan__button'>
-                {switchInputsSVG}
-            </button>
+            <Button>{switchInputsSVG}</Button>
         </Container>
     );
 };
