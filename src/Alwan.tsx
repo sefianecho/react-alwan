@@ -9,7 +9,8 @@ import Utility from './components/Utility';
 import type { alwanProps, colorState } from './types';
 import Button from './components/Button';
 
-const Alwan = ({ id, className, theme = 'light' }: alwanProps) => {
+const Alwan = ({ id, className, theme = 'light', toggle = true }: alwanProps) => {
+    const [isOpen, setOpen] = useState(false);
     const [color, setColor] = useState<colorState>({
         h: 0,
         s: 0,
@@ -27,8 +28,18 @@ const Alwan = ({ id, className, theme = 'light' }: alwanProps) => {
 
     return (
         <>
-            <Button className={`alwan__preset-button${className ? ' ' + className : ''}`} />
-            <div id={id} className='alwan' data-theme={theme}>
+            <Button
+                className={`alwan__preset-button${className ? ' ' + className : ''}`}
+                /**
+                 * Toggle color picker.
+                 */
+                onClick={() => {
+                    if (toggle) {
+                        setOpen(!isOpen);
+                    }
+                }}
+            />
+            <div id={id} className={`alwan${isOpen ? ' alwan--open' : ''}`} data-theme={theme}>
                 <Palette />
                 <Container>
                     <Utility />

@@ -19,6 +19,13 @@ export interface alwanProps {
      * @default 'light'
      */
     theme: 'light' | 'dark';
+
+    /**
+     * Toggle picker's visibility (Show/Hide), Setting this to false keeps the picker visible.
+     *
+     * @default true
+     */
+    toggle: boolean;
 }
 
 export interface RGB {
