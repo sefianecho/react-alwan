@@ -6,10 +6,10 @@ import Palette from './components/Palette';
 import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
-import type { colorState } from './types';
+import type { alwanProps, colorState } from './types';
 import Button from './components/Button';
 
-const Alwan = () => {
+const Alwan = ({ id, className, theme = 'light' }: alwanProps) => {
     const [color, setColor] = useState<colorState>({
         h: 0,
         s: 0,
@@ -27,8 +27,8 @@ const Alwan = () => {
 
     return (
         <>
-            <Button className='alwan__preset-button' />
-            <div className='alwan'>
+            <Button className={`alwan__preset-button${className ? ' ' + className : ''}`} />
+            <div id={id} className='alwan' data-theme={theme}>
                 <Palette />
                 <Container>
                     <Utility />

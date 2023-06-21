@@ -1,3 +1,26 @@
+export interface alwanProps {
+    /**
+     * Set the container's (widget) id.
+     *
+     * @default ''
+     */
+    id: string;
+
+    /**
+     * Add classname to the reference button.
+     *
+     * @default ''
+     */
+    className: string;
+
+    /**
+     * Choose a theme.
+     *
+     * @default 'light'
+     */
+    theme: 'light' | 'dark';
+}
+
 export interface RGB {
     r: number;
     g: number;
