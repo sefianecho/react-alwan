@@ -23,3 +23,12 @@ export interface colorState extends RGBA, HSL {
     hsl: string;
     hex: string;
 }
+
+export type DOMRectArray = [
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    right: number,
+    bottom: number
+];
