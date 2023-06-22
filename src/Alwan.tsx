@@ -19,7 +19,7 @@ import type {
     internalHSL,
     popoverAutoUpdate,
 } from './types';
-import { ALL_FORMATS, HSL_FORMAT, RGB_FORMAT, ROOT } from './constants';
+import { ALL_FORMATS, DEFAULT_COLOR, HSL_FORMAT, RGB_FORMAT, ROOT } from './constants';
 import { createPopover } from './lib/popover';
 import { createPortal } from 'react-dom';
 import { round } from './utils/math';
@@ -32,6 +32,7 @@ const Alwan = ({
     className,
     theme = 'light',
     toggle = true,
+    value = DEFAULT_COLOR,
     popover = true,
     position = 'bottom-start',
     margin = 0,
@@ -82,22 +83,21 @@ const Alwan = ({
      * @param updateAll - Whether to update the palette and sliders.
      * @param rgb - RGB color.
      */
-    const update: colorUpdater = (hsl, source, updateAll = false, rgb) => {
-        updatePaletteAndSliders.current = updateAll;
+    const update: colorUpdater = useCallback(
+        (hsl, source, updateAll = false, rgb) => {
+            updatePaletteAndSliders.current = updateAll;
 
-        setColor((color) => {
-            const { r, g, b, a } = color;
+            setColor((color) => {
+                const { r, g, b, a } = color;
 
-            color = { ...color, ...hsl };
-            color = {
-                ...color,
-                s: round(color.S * 100),
-                l: round(color.L * 100),
-                ...(rgb || HSLToRGB(color)),
-            };
+                color = { ...color, ...hsl };
+                color = {
+                    ...color,
+                    s: round(color.S * 100),
+                    l: round(color.L * 100),
+                    ...(rgb || HSLToRGB(color)),
+                };
 
-            // If color changes then update color strings and with them update UI.
-            if (color.r !== r || color.g !== g || color.b !== b || color.a !== a) {
                 const [opaque, alphaHex] = RGBToHEX(color);
 
                 color.rgb = stringify(color, RGB_FORMAT);
@@ -105,14 +105,20 @@ const Alwan = ({
                 color.hex = opaque + alphaHex;
                 color.opaque = opaque;
 
-                if (source && onChange) {
+                // Fire onChange if at least one of the rgba components changes.
+                if (
+                    source &&
+                    onChange &&
+                    (color.r !== r || color.g !== g || color.b !== b || color.a !== a)
+                ) {
                     onChange(event(color, 'change', source));
                 }
-            }
 
-            return color;
-        });
-    };
+                return color;
+            });
+        },
+        [onChange]
+    );
 
     /**
      * Generates event details (color value and components).
@@ -142,24 +148,27 @@ const Alwan = ({
      * @param value - Color value.
      * @param source - Element that updating the color.
      */
-    const updateFromValue: colorUpdaterFromValue = (value, source) => {
-        const [parsedColor, format] = parseColor(value) as [
-            color: RGBA | (internalHSL & HSLA),
-            format: colorFormat
-        ];
+    const updateFromValue: colorUpdaterFromValue = useCallback(
+        (value, source) => {
+            const [parsedColor, format] = parseColor(value) as [
+                color: RGBA | (internalHSL & HSLA),
+                format: colorFormat
+            ];
 
-        let rgb: RGBA | undefined;
-        let hsl: (internalHSL & HSLA) | internalHSL;
+            let rgb: RGBA | undefined;
+            let hsl: (internalHSL & HSLA) | internalHSL;
 
-        if (format === RGB_FORMAT) {
-            rgb = parsedColor as RGBA;
-            hsl = RGBToHSL(rgb);
-        } else {
-            hsl = parsedColor as internalHSL & HSLA;
-        }
+            if (format === RGB_FORMAT) {
+                rgb = parsedColor as RGBA;
+                hsl = RGBToHSL(rgb);
+            } else {
+                hsl = parsedColor as internalHSL & HSLA;
+            }
 
-        update(hsl, source, true, rgb);
-    };
+            update(hsl, source, true, rgb);
+        },
+        [update]
+    );
 
     /**
      * Picker reference button.
@@ -169,6 +178,7 @@ const Alwan = ({
             id={id}
             type='button'
             className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
+            style={{ '--alwan-color': color.rgb } as React.CSSProperties}
             /**
              * Toggle color picker.
              */
@@ -319,6 +329,13 @@ const Alwan = ({
             popoverInstance.current = null;
         };
     }, [popover, margin, position, autoUpdate, popoverAccessibility]);
+
+    /**
+     * Update color from value Prop.
+     */
+    useEffect(() => {
+        updateFromValue(value);
+    }, [updateFromValue, value]);
 
     return (
         <>

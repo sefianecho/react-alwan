@@ -83,6 +83,13 @@ export interface alwanProps {
     opacity?: boolean;
 
     /**
+     * Color picker value.
+     *
+     * @default '#000'
+     */
+    value?: Color;
+
+    /**
      * For the formats 'hsl' and 'rgb', choose a single input to display the color string,
      * or if false, display an input for each color channel.
      *
