@@ -229,6 +229,11 @@ export type DOMRectArray = [
 
 export interface paletteProps {
     updater: colorUpdater;
+    color: colorState;
+    /**
+     * Can palette update the marker position from color state.
+     */
+    canUpdate: boolean;
 }
 
 export interface utilityProps {

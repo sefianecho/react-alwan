@@ -8,7 +8,7 @@ import type { paletteProps } from '../types';
 /**
  * Color picking area. pick color by dragging the marker (picker).
  */
-const Palette = ({ updater }: paletteProps) => {
+const Palette = ({ updater, color, canUpdate }: paletteProps) => {
     const paletteElement = useRef<HTMLDivElement>(null);
     const markerElement = useRef<HTMLDivElement>(null);
     const markerPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -81,6 +81,9 @@ const Palette = ({ updater }: paletteProps) => {
         moveMarkerAndUpdateColor(e);
     };
 
+    /**
+     * Drag marker.
+     */
     useEffect(() => {
         /**
          * Dragging the marker.
@@ -111,6 +114,22 @@ const Palette = ({ updater }: paletteProps) => {
         };
     });
 
+    /**
+     * Update marker's position from color state.
+     */
+    useEffect(() => {
+        if (canUpdate) {
+            const [, , width, height] = getBounds(paletteElement.current as HTMLDivElement);
+            const { S, L } = color;
+            const v = L + S * min(L, 1 - L);
+            const x = (v ? 2 * (1 - L / v) : 0) * width;
+            const y = (1 - v) * height;
+
+            markerPosition.current = { x, y };
+            translate(markerElement.current as HTMLDivElement, x, y);
+        }
+    }, [canUpdate, color]);
+
     return (
         <>
             <div
@@ -119,6 +138,7 @@ const Palette = ({ updater }: paletteProps) => {
                 onPointerDown={dragStart}
                 onKeyDown={handleKeyboard}
                 ref={paletteElement}
+                style={{ '--alwan-h': color.h } as React.CSSProperties}
             >
                 <div className='alwan__marker' ref={markerElement}></div>
             </div>
