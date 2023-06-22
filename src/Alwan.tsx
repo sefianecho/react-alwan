@@ -76,6 +76,7 @@ const Alwan = ({
                     format={currentFormat}
                     singleInput={singleInput}
                     opacity={opacity}
+                    changeFormat={(format) => setCurrentFormat(format)}
                 />
                 <Swatches />
             </div>

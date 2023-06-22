@@ -5,7 +5,7 @@ import Button from './Button';
 import Container from './Container';
 import { HEX_FORMAT } from '../constants';
 
-const Inputs = ({ formats, format, singleInput, opacity }: inputsProps) => {
+const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsProps) => {
     /**
      * Checks if inputs are a single input.
      */
@@ -20,7 +20,14 @@ const Inputs = ({ formats, format, singleInput, opacity }: inputsProps) => {
     );
 
     const [fields, setFields] = useState<string[]>(getFields());
-    const length = fields.length;
+    const length = formats.length;
+
+    /**
+     * Handles switch inputs button click.
+     */
+    const handleClick = () => {
+        changeFormat(formats[(formats.indexOf(format) + 1) % length]);
+    };
 
     /**
      * Update fields.
@@ -40,7 +47,7 @@ const Inputs = ({ formats, format, singleInput, opacity }: inputsProps) => {
                         </label>
                     ))}
                 </div>
-                {length > 1 ? <Button>{switchInputsSVG}</Button> : null}
+                {length > 1 ? <Button onClick={handleClick}>{switchInputsSVG}</Button> : null}
             </Container>
         );
     }

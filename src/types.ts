@@ -133,4 +133,5 @@ export interface inputsProps {
     format: colorFormat;
     singleInput: boolean;
     opacity: boolean;
+    changeFormat: (format: colorFormat) => void;
 }
