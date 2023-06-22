@@ -4,32 +4,32 @@ export type popoverPosition = side | `${side}-${'start' | 'center' | 'end'}`;
 
 export interface alwanProps {
     /**
-     * Set the container's (widget) id.
+     * Set color picker id.
      *
      * @default ''
      */
-    id: string;
+    id?: string;
 
     /**
      * Add classname to the reference button.
      *
      * @default ''
      */
-    className: string;
+    className?: string;
 
     /**
      * Choose a theme.
      *
      * @default 'light'
      */
-    theme: 'light' | 'dark';
+    theme?: 'light' | 'dark';
 
     /**
      * Toggle picker's visibility (Show/Hide), Setting this to false keeps the picker visible.
      *
      * @default true
      */
-    toggle: boolean;
+    toggle?: boolean;
 
     /**
      * Display the picker container as a pop-up (a box that floats on top of the page content),
@@ -37,7 +37,7 @@ export interface alwanProps {
      *
      * @default true
      */
-    popover: boolean;
+    popover?: boolean;
 
     /**
      * Set the position of the popper (if popover is set to true) relative to the reference element,
@@ -52,35 +52,35 @@ export interface alwanProps {
      *
      * @default 'bottom-start'
      */
-    position: popoverPosition;
+    position?: popoverPosition;
 
     /**
      * Set the gap (in pixels) between the picker container and the reference element.
      *
      * @default 0
      */
-    margin: number;
+    margin?: number;
 
     /**
      * Preview the color.
      *
      * @default true
      */
-    preview: boolean;
+    preview?: boolean;
 
     /**
      * Add/Remove a copy button.
      *
      * @default true
      */
-    copy: boolean;
+    copy?: boolean;
 
     /**
      * Support alpha channel and display opacity slider.
      *
      * @default true
      */
-    opacity: boolean;
+    opacity?: boolean;
 
     /**
      * For the formats 'hsl' and 'rgb', choose a single input to display the color string,
@@ -88,7 +88,7 @@ export interface alwanProps {
      *
      * @default false
      */
-    singleInput: boolean;
+    singleInput?: boolean;
 
     /**
      * Input(s) field(s) for each color format. if this option is set to true then all formats are,
@@ -97,35 +97,35 @@ export interface alwanProps {
      * @default { rgb: true, hsl: true, hex: true }
      *
      */
-    inputs: boolean | Partial<Record<colorFormat, boolean>>;
+    inputs?: boolean | Partial<Record<colorFormat, boolean>>;
 
     /**
      * Initial color format.
      *
      * @default 'rgb'
      */
-    format: colorFormat;
+    format?: colorFormat;
 
     /**
      * Array of color swatches, invalid values will default to rgb(0,0,0).
      *
      * @default []
      */
-    swatches: Color[];
+    swatches?: Color[];
 
     /**
      * Make swatches container collapsible.
      *
      * @default false
      */
-    toggleSwatches: boolean;
+    toggleSwatches?: boolean;
 
     /**
      * Close the color picker when scrolling.
      *
      * @default false
      */
-    closeOnScroll: boolean;
+    closeOnScroll?: boolean;
 }
 
 export interface RGB {

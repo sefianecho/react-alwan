@@ -56,6 +56,7 @@ const Alwan = ({
      */
     const button = (
         <button
+            id={id}
             type='button'
             className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
             /**
@@ -75,7 +76,6 @@ const Alwan = ({
      */
     const alwan = (
         <div
-            id={id}
             className={`alwan${isOpen ? ' alwan--open' : ''}${popover ? ' alwan--popup' : ''}`}
             data-theme={theme}
             ref={popoverContainer}
@@ -122,6 +122,62 @@ const Alwan = ({
     );
 
     /**
+     * Handles popover accessibility.
+     * Link focus the reference button with the container's first and last focusable element.
+     * close popover if the Escape key is pressed or a click (touch) occurred outside of the
+     * popover.
+     */
+    const popoverAccessibility = useCallback(
+        (e: Event | PointerEvent | KeyboardEvent) => {
+            if (isOpen) {
+                const target = e.target as Node;
+                const { key, shiftKey } = e as KeyboardEvent;
+                const reference = popoverReference.current as HTMLButtonElement;
+                const container = popoverContainer.current as HTMLDivElement;
+
+                if (
+                    // Pressing the Escape key or Clicking away closes the popover.
+                    key === 'Escape' ||
+                    (target !== reference &&
+                        ![...reference.labels].some((label) => label.contains(target)) &&
+                        !container.contains(target))
+                ) {
+                    if (toggle) {
+                        setOpen(false);
+                    }
+                } else if (key === 'Tab') {
+                    const focusableElements = [
+                        ...container.querySelectorAll<HTMLElement>('button,input,[tabindex]'),
+                    ];
+                    const firstFocusableElement = focusableElements[0];
+                    const lastFocusableElement = focusableElements.pop() as HTMLElement;
+                    let elementToFocus: HTMLElement | undefined;
+
+                    // Pressing tab while focusing on the reference element (picker button),
+                    // sends focus to the palette.
+                    if (target === reference && !shiftKey) {
+                        elementToFocus = firstFocusableElement;
+                    } else if (
+                        // Pressing Tab or shift + Tab while focusing on the last focusable element,
+                        // or the first focusable element respectively sends focus to the reference,
+                        // element (picker button)
+                        (shiftKey && target === firstFocusableElement) ||
+                        (!shiftKey && target === lastFocusableElement)
+                    ) {
+                        elementToFocus = reference;
+                    }
+
+                    if (elementToFocus) {
+                        e.preventDefault();
+                        elementToFocus.focus();
+                    }
+                }
+            }
+        },
+        [toggle, isOpen]
+    );
+
+    /**
      * Update input formats and current format index.
      */
     useEffect(() => {
@@ -137,16 +193,12 @@ const Alwan = ({
      */
     useEffect(() => {
         if (popover) {
-            const reference = popoverReference.current as HTMLButtonElement;
-            const container = popoverContainer.current as HTMLDivElement;
             popoverInstance.current = createPopover(
-                reference,
-                container,
+                popoverReference.current as HTMLButtonElement,
+                popoverContainer.current as HTMLDivElement,
                 { margin, position },
                 autoUpdate,
-                (e) => {
-                    // todo.
-                }
+                popoverAccessibility
             );
         }
 
@@ -154,7 +206,7 @@ const Alwan = ({
             popoverInstance.current?.destroy();
             popoverInstance.current = null;
         };
-    }, [popover, margin, position, autoUpdate]);
+    }, [popover, margin, position, autoUpdate, popoverAccessibility]);
 
     return (
         <>
