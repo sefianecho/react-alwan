@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { switchInputsSVG } from '../assets/svg/icons';
-import type { inputsProps } from '../types';
+import { colorState, inputValues, type inputsProps } from '../types';
 import Container from './Container';
 import { HEX_FORMAT } from '../constants';
+import { stringify } from '../colors/stringify';
 
-const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsProps) => {
+const Inputs = ({
+    color,
+    formats,
+    format,
+    singleInput,
+    opacity,
+    updater,
+    changeFormat,
+}: inputsProps) => {
     /**
      * Checks if inputs are a single input.
      */
@@ -14,11 +23,14 @@ const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsP
      * Gets fields to build.
      */
     const getFields = useCallback(
-        () => (isSingle() ? [format] : (format + (opacity ? 'a' : '')).split('')),
+        () =>
+            (isSingle() ? [format] : (format + (opacity ? 'a' : '')).split('')) as Array<
+                keyof colorState
+            >,
         [isSingle, format, opacity]
     );
-
-    const [fields, setFields] = useState<string[]>(getFields());
+    const [values, setValues] = useState<inputValues>({ ...color });
+    const [fields, setFields] = useState<Array<keyof colorState>>(getFields());
     const length = formats.length;
 
     /**
@@ -26,6 +38,25 @@ const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsP
      */
     const handleClick = () => {
         changeFormat(formats[(formats.indexOf(format) + 1) % length]);
+    };
+
+    /**
+     * Handles inputs change.
+     *
+     * @param param0 - Event.
+     * @param field - Input identifier.
+     */
+    const handleChange = (
+        { target, target: { value } }: React.ChangeEvent<HTMLInputElement>,
+        field: keyof colorState
+    ) => {
+        values[field] = value;
+        if (field !== format) {
+            value = stringify(values, format);
+        }
+
+        updater(field === format ? value : stringify(values, format), target);
+        setValues({ ...values });
     };
 
     /**
@@ -41,7 +72,12 @@ const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsP
                 <div className='alwan__inputs'>
                     {fields.map((field) => (
                         <label key={field}>
-                            <input type='text' className='alwan__input' />
+                            <input
+                                type='text'
+                                className='alwan__input'
+                                value={values[field]}
+                                onChange={(e) => handleChange(e, field)}
+                            />
                             <span>{field}</span>
                         </label>
                     ))}

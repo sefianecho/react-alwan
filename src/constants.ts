@@ -8,6 +8,8 @@ export const POINTER_UP = 'pointerup';
 export const KEY_DOWN = 'keydown';
 export const SCROLL = 'scroll';
 export const RESIZE = 'resize';
+
+export const DEFAULT_COLOR = '#000';
 /**
  * Move marker vertically using the keyboard arrow keys
  */

@@ -1,5 +1,5 @@
-import type { RGB, colorState } from '../types';
-import { max, min, round } from '../utils/math';
+import type { RGB, RGBA, colorState, internalHSL } from '../types';
+import { abs, max, min, normalizeAngle, round } from '../utils/math';
 
 /**
  * Converts a decimal number to hexadecimal.
@@ -49,5 +49,39 @@ export const HSLToRGB = ({ h, S, L }: colorState): RGB => {
         r: fn(h, S, L),
         g: fn(h + 8, S, L),
         b: fn(h + 4, S, L),
+    };
+};
+
+/**
+ * Converts RGB to HSL.
+ *
+ * @param {object} param0 - RGB color object.
+ * @returns {object} - HSL color object.
+ */
+export const RGBToHSL = ({ r, g, b, a }: RGBA): internalHSL => {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const cMax = max(r, g, b);
+    const cMin = min(r, g, b);
+    const d = cMax - cMin;
+    const L = (cMax + cMin) / 2;
+    const h =
+        d === 0
+            ? 0
+            : cMax === r
+            ? ((g - b) / d) % 6
+            : cMax === g
+            ? (b - r) / d + 2
+            : cMax === b
+            ? (r - g) / d + 4
+            : 0;
+
+    return {
+        h: normalizeAngle(h * 60),
+        S: d ? d / (1 - abs(2 * L - 1)) : 0,
+        L,
+        a,
     };
 };

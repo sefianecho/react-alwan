@@ -205,6 +205,10 @@ export interface colorState extends RGBA, HSL {
     opaque: string;
 }
 
+export type inputValues = {
+    [P in keyof colorState]: colorState[P] extends number ? number | string : string;
+};
+
 export type Color = string | RGB | RGBA | HSL | HSLA;
 
 export type DOMRectArray = [
@@ -231,10 +235,12 @@ export interface slidersProps {
 }
 
 export interface inputsProps {
+    color: colorState;
     formats: colorFormat[];
     format: colorFormat;
     singleInput: boolean;
     opacity: boolean;
+    updater: colorUpdaterFromValue;
     changeFormat: (format: colorFormat) => void;
 }
 
@@ -267,3 +273,4 @@ export type colorUpdater = (
     updateAll?: boolean,
     rgb?: RGBA
 ) => void;
+export type colorUpdaterFromValue = (value: Color, source?: HTMLElement) => void;

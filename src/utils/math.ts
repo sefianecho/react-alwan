@@ -1,4 +1,4 @@
-export const { min, max, abs, round } = Math;
+export const { min, max, abs, round, PI } = Math;
 export const { parseFloat: float, parseInt: int, isFinite: isNumeric } = Number;
 
 /**
@@ -13,4 +13,14 @@ export const boundNumber = (number: number | string, upperBound = 100, lowerBoun
     // Assert number as type number if it's a string.
     // Math.max coerce string numbers to numbers.
     return min(max(number as unknown as number, lowerBound), upperBound);
+};
+
+/**
+ * Angle value in degrees, it must be between 0 and 360.
+ *
+ * @param angle - Angle.
+ * @returns - Normalized angle value.
+ */
+export const normalizeAngle = (angle: number) => {
+    return ((round(angle) % 360) + 360) % 360;
 };

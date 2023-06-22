@@ -7,19 +7,24 @@ import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
 import type {
+    HSLA,
     Popover,
+    RGBA,
     alwanProps,
     colorFormat,
     colorState,
     colorUpdater,
+    colorUpdaterFromValue,
+    internalHSL,
     popoverAutoUpdate,
 } from './types';
 import { ALL_FORMATS, HSL_FORMAT, RGB_FORMAT, ROOT } from './constants';
 import { createPopover } from './lib/popover';
 import { createPortal } from 'react-dom';
 import { round } from './utils/math';
-import { HSLToRGB, RGBToHEX } from './colors/converter';
+import { HSLToRGB, RGBToHEX, RGBToHSL } from './colors/converter';
 import { stringify } from './colors/stringify';
+import { parseColor } from './colors/parser';
 
 const Alwan = ({
     id,
@@ -79,6 +84,9 @@ const Alwan = ({
         updatePaletteAndSliders.current = updateAll;
 
         setColor((color) => {
+            const { r, g, b, a } = color;
+            const previousColor = color;
+
             color = { ...color, ...hsl };
             color = {
                 ...color,
@@ -86,15 +94,38 @@ const Alwan = ({
                 ...(rgb || HSLToRGB(color)),
             };
 
-            const [opaque, alphaHex] = RGBToHEX(color);
+            // If color changes then update color strings and with them update UI.
+            if (color.r !== r || color.g !== g || color.b !== b || color.a !== a) {
+                const [opaque, alphaHex] = RGBToHEX(color);
 
-            color.rgb = stringify(color, RGB_FORMAT);
-            color.hsl = stringify(color, HSL_FORMAT);
-            color.hex = opaque + alphaHex;
-            color.opaque = opaque;
+                color.rgb = stringify(color, RGB_FORMAT);
+                color.hsl = stringify(color, HSL_FORMAT);
+                color.hex = opaque + alphaHex;
+                color.opaque = opaque;
 
-            return color;
+                return color;
+            }
+
+            return previousColor;
         });
+    };
+
+    const updateFromValue: colorUpdaterFromValue = (value, source) => {
+        const [parsedColor, format] = parseColor(value) as [
+            color: RGBA | (internalHSL & HSLA),
+            format: colorFormat
+        ];
+
+        let rgb: RGBA | undefined, hsl: (internalHSL & HSLA) | internalHSL;
+
+        if (format === RGB_FORMAT) {
+            rgb = parsedColor as RGBA;
+            hsl = RGBToHSL(rgb);
+        } else {
+            hsl = parsedColor as internalHSL & HSLA;
+        }
+
+        update(hsl, source, true, rgb);
     };
 
     /**
@@ -132,10 +163,12 @@ const Alwan = ({
                 <Sliders opacity={opacity} updater={update} />
             </Container>
             <Inputs
+                color={color}
                 formats={formats}
                 format={currentFormat}
                 singleInput={singleInput}
                 opacity={opacity}
+                updater={updateFromValue}
                 changeFormat={(format) => setCurrentFormat(format)}
             />
             <Swatches swatches={swatches} toggle={toggleSwatches} />
