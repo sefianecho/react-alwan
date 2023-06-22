@@ -244,6 +244,7 @@ export interface utilityProps {
 export interface slidersProps {
     opacity: boolean;
     updater: colorUpdater;
+    color: colorState;
 }
 
 export interface inputsProps {

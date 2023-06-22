@@ -86,7 +86,6 @@ const Alwan = ({
 
         setColor((color) => {
             const { r, g, b, a } = color;
-            const previousColor = color;
 
             color = { ...color, ...hsl };
             color = {
@@ -107,11 +106,9 @@ const Alwan = ({
                 if (source && onChange) {
                     onChange();
                 }
-
-                return color;
             }
 
-            return previousColor;
+            return color;
         });
     };
 
@@ -172,7 +169,7 @@ const Alwan = ({
             <Palette updater={update} color={color} canUpdate={updatePaletteAndSliders.current} />
             <Container>
                 <Utility preview={preview} copy={copy} />
-                <Sliders opacity={opacity} updater={update} />
+                <Sliders opacity={opacity} updater={update} color={color} />
             </Container>
             <Inputs
                 color={color}

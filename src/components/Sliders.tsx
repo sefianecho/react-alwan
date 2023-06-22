@@ -5,7 +5,7 @@ import type { slidersProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Sliders = ({ opacity, updater }: slidersProps) => {
+const Sliders = ({ opacity, updater, color }: slidersProps) => {
     /**
      * Updates color state.
      *
@@ -25,12 +25,15 @@ const Sliders = ({ opacity, updater }: slidersProps) => {
                 type='range'
                 className='alwan__slider alwan__slider--hue'
                 max={360}
+                value={360 - color.h}
                 onChange={(e) => handleChange(e, 'h')}
             />
             {opacity ? (
                 <input
                     type='range'
                     className='alwan__slider alwan__slider--alpha'
+                    style={{ '--alwan-rgb': color.opaque } as React.CSSProperties}
+                    value={color.a}
                     max={1}
                     step={0.01}
                     onChange={(e) => handleChange(e, 'a')}
