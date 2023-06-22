@@ -237,6 +237,7 @@ export interface paletteProps {
 }
 
 export interface utilityProps {
+    color: colorState;
     copy: boolean;
     preview: boolean;
 }

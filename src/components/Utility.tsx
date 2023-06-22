@@ -6,14 +6,27 @@ import type { utilityProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Utility = ({ preview, copy }: utilityProps) => {
+const Utility = ({ preview, copy, color }: utilityProps) => {
     const copyButton = copy ? (
         <button type='button' className='alwan__button alwan__copy-button'>
             {clipboardSVG}
         </button>
     ) : null;
 
-    return <>{preview ? <div className='alwan__preview'>{copyButton}</div> : copyButton}</>;
+    return (
+        <>
+            {preview ? (
+                <div
+                    className='alwan__preview'
+                    style={{ '--alwan-color': color.rgb } as React.CSSProperties}
+                >
+                    {copyButton}
+                </div>
+            ) : (
+                copyButton
+            )}
+        </>
+    );
 };
 
 export default Utility;
