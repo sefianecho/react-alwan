@@ -43,6 +43,7 @@ const Alwan = ({
     swatches = [],
     toggleSwatches = true,
     closeOnScroll = false,
+    onChange,
 }: alwanProps) => {
     const popoverInstance = useRef<Popover | null>(null);
     const popoverReference = useRef<HTMLButtonElement>(null);
@@ -103,6 +104,10 @@ const Alwan = ({
                 color.hex = opaque + alphaHex;
                 color.opaque = opaque;
 
+                if (source && onChange) {
+                    onChange();
+                }
+
                 return color;
             }
 
@@ -110,13 +115,20 @@ const Alwan = ({
         });
     };
 
+    /**
+     * Updates color state from a color value (string or object).
+     *
+     * @param value - Color value.
+     * @param source - Element that updating the color.
+     */
     const updateFromValue: colorUpdaterFromValue = (value, source) => {
         const [parsedColor, format] = parseColor(value) as [
             color: RGBA | (internalHSL & HSLA),
             format: colorFormat
         ];
 
-        let rgb: RGBA | undefined, hsl: (internalHSL & HSLA) | internalHSL;
+        let rgb: RGBA | undefined;
+        let hsl: (internalHSL & HSLA) | internalHSL;
 
         if (format === RGB_FORMAT) {
             rgb = parsedColor as RGBA;

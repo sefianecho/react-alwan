@@ -126,6 +126,13 @@ export interface alwanProps {
      * @default false
      */
     closeOnScroll?: boolean;
+
+    /**
+     * On Change event fired whenever the color changes.
+     *
+     * @default undefined;
+     */
+    onChange?: () => void;
 }
 
 export interface RGB {
