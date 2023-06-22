@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { switchInputsSVG } from '../assets/svg/icons';
 import { colorState, inputValues, type inputsProps } from '../types';
 import Container from './Container';
 import { HEX_FORMAT } from '../constants';
 import { stringify } from '../colors/stringify';
 
+/**
+ * Color picker inputs.
+ *
+ * @param param0 - Props.
+ */
 const Inputs = ({
     color,
     formats,
@@ -15,21 +20,18 @@ const Inputs = ({
     changeFormat,
 }: inputsProps) => {
     /**
-     * Checks if inputs are a single input.
-     */
-    const isSingle = useCallback(() => format === HEX_FORMAT || singleInput, [format, singleInput]);
-
-    /**
      * Gets fields to build.
      */
     const getFields = useCallback(
         () =>
-            (isSingle() ? [format] : (format + (opacity ? 'a' : '')).split('')) as Array<
-                keyof colorState
-            >,
-        [isSingle, format, opacity]
+            (format === HEX_FORMAT || singleInput
+                ? [format]
+                : (format + (opacity ? 'a' : '')).split('')) as Array<keyof colorState>,
+        [format, opacity, singleInput]
     );
-    const [values, setValues] = useState<inputValues>({ ...color });
+    const values = useRef<inputValues>({ ...color });
+    // Used so inputs don't updates their values.
+    const changing = useRef(false);
     const [fields, setFields] = useState<Array<keyof colorState>>(getFields());
     const length = formats.length;
 
@@ -50,13 +52,9 @@ const Inputs = ({
         { target, target: { value } }: React.ChangeEvent<HTMLInputElement>,
         field: keyof colorState
     ) => {
-        values[field] = value;
-        if (field !== format) {
-            value = stringify(values, format);
-        }
-
-        updater(field === format ? value : stringify(values, format), target);
-        setValues({ ...values });
+        changing.current = true;
+        values.current[field] = value;
+        updater(field === format ? value : stringify(values.current, format), target);
     };
 
     /**
@@ -75,8 +73,11 @@ const Inputs = ({
                             <input
                                 type='text'
                                 className='alwan__input'
-                                value={values[field]}
+                                value={changing.current ? values.current[field] : color[field]}
                                 onChange={(e) => handleChange(e, field)}
+                                onBlur={() => {
+                                    changing.current = false;
+                                }}
                             />
                             <span>{field}</span>
                         </label>

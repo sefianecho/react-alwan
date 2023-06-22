@@ -90,7 +90,8 @@ const Alwan = ({
             color = { ...color, ...hsl };
             color = {
                 ...color,
-                ...{ s: round(color.S), l: round(color.L) },
+                s: round(color.S * 100),
+                l: round(color.L * 100),
                 ...(rgb || HSLToRGB(color)),
             };
 
