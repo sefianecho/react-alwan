@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { slidersProps } from '../types';
 
 /**
@@ -18,6 +19,15 @@ const Sliders = ({ opacity, updater, color }: slidersProps) => {
     ) => {
         updater({ [channel]: channel === 'h' ? 360 - valueAsNumber : valueAsNumber }, target);
     };
+
+    /**
+     * Resets the alpha component to 1, if the opacity prop changed to false.
+     */
+    useEffect(() => {
+        if (!opacity) {
+            updater({ a: 1 });
+        }
+    }, [opacity, updater]);
 
     return (
         <div className='alwan__sliders'>
