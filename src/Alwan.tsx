@@ -10,6 +10,7 @@ import type {
     HSLA,
     Popover,
     RGBA,
+    alwanEventType,
     alwanProps,
     colorFormat,
     colorState,
@@ -105,13 +106,35 @@ const Alwan = ({
                 color.opaque = opaque;
 
                 if (source && onChange) {
-                    onChange();
+                    onChange(event(color, 'change', source));
                 }
             }
 
             return color;
         });
     };
+
+    /**
+     * Generates event details (color value and components).
+     *
+     * @param color - color state.
+     * @param type - Event type.
+     * @param source - Event source.
+     */
+    const event = (color: colorState, type: alwanEventType, source?: HTMLElement) => ({
+        type,
+        source,
+        h: color.h,
+        s: color.s,
+        l: color.l,
+        r: color.r,
+        g: color.g,
+        b: color.b,
+        a: color.a,
+        rgb: color.rgb,
+        hsl: color.hsl,
+        hex: color.hex,
+    });
 
     /**
      * Updates color state from a color value (string or object).

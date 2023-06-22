@@ -132,7 +132,7 @@ export interface alwanProps {
      *
      * @default undefined;
      */
-    onChange?: () => void;
+    onChange?: (ev: alwanEvent) => void;
 }
 
 export interface RGB {
@@ -290,3 +290,12 @@ export type colorUpdater = (
     rgb?: RGBA
 ) => void;
 export type colorUpdaterFromValue = (value: Color, source?: HTMLElement) => void;
+
+export type alwanEventType = 'change' | 'open' | 'close';
+export interface alwanEvent extends Readonly<RGBA>, Readonly<HSL> {
+    readonly type: alwanEventType;
+    readonly source: HTMLElement | undefined;
+    readonly rgb: string;
+    readonly hsl: string;
+    readonly hex: string;
+}
