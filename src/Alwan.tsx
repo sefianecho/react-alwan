@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './assets/alwan.scss';
 import Container from './components/Container';
 import Inputs from './components/Inputs';
@@ -6,7 +6,7 @@ import Palette from './components/Palette';
 import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
-import type { Popover, alwanProps, colorFormat, colorState } from './types';
+import type { Popover, alwanProps, colorFormat, colorState, popoverAutoUpdate } from './types';
 import { ALL_FORMATS, RGB_FORMAT, ROOT } from './constants';
 import { createPopover } from './lib/popover';
 import { createPortal } from 'react-dom';
@@ -27,6 +27,7 @@ const Alwan = ({
     singleInput = false,
     swatches = [],
     toggleSwatches = true,
+    closeOnScroll = false,
 }: alwanProps) => {
     const popoverInstance = useRef<Popover | null>(null);
     const popoverReference = useRef<HTMLButtonElement>(null);
@@ -96,6 +97,31 @@ const Alwan = ({
     );
 
     /**
+     * Updates popover position whenever an overflow ancestor of the
+     * popover reference element scrolls or the window resizes.
+     */
+    const autoUpdate: popoverAutoUpdate = useCallback(
+        (update, isInViewport) => {
+            if (isOpen || !toggle) {
+                if (isInViewport()) {
+                    if (isOpen) {
+                        update();
+                        if (closeOnScroll) {
+                            setOpen(false);
+                        }
+                    } else {
+                        setOpen(true);
+                    }
+                } else {
+                    // Close the popover if the reference element is not visible.
+                    setOpen(false);
+                }
+            }
+        },
+        [isOpen, toggle, closeOnScroll]
+    );
+
+    /**
      * Update input formats and current format index.
      */
     useEffect(() => {
@@ -117,9 +143,7 @@ const Alwan = ({
                 reference,
                 container,
                 { margin, position },
-                (update, isInViewport) => {
-                    // todo.
-                },
+                autoUpdate,
                 (e) => {
                     // todo.
                 }
@@ -130,7 +154,7 @@ const Alwan = ({
             popoverInstance.current?.destroy();
             popoverInstance.current = null;
         };
-    }, [popover, margin, position]);
+    }, [popover, margin, position, autoUpdate]);
 
     return (
         <>

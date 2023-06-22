@@ -119,6 +119,13 @@ export interface alwanProps {
      * @default false
      */
     toggleSwatches: boolean;
+
+    /**
+     * Close the color picker when scrolling.
+     *
+     * @default false
+     */
+    closeOnScroll: boolean;
 }
 
 export interface RGB {
