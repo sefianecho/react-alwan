@@ -216,6 +216,10 @@ export type DOMRectArray = [
     bottom: number
 ];
 
+export interface paletteProps {
+    updater: colorUpdater;
+}
+
 export interface utilityProps {
     copy: boolean;
     preview: boolean;

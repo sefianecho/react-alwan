@@ -126,7 +126,7 @@ const Alwan = ({
             data-theme={theme}
             ref={popoverContainer}
         >
-            <Palette />
+            <Palette updater={update} />
             <Container>
                 <Utility preview={preview} copy={copy} />
                 <Sliders opacity={opacity} />

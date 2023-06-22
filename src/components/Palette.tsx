@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KEYBOARD_X, KEYBOARD_Y, POINTER_MOVE, POINTER_UP, ROOT } from '../constants';
 import { getBounds, translate } from '../utils/dom';
-import { boundNumber } from '../utils/math';
+import { boundNumber, min } from '../utils/math';
 import { createPortal } from 'react-dom';
+import type { paletteProps } from '../types';
 
 /**
  * Color picking area. pick color by dragging the marker (picker).
  */
-const Palette = () => {
+const Palette = ({ updater }: paletteProps) => {
     const paletteElement = useRef<HTMLDivElement>(null);
     const markerElement = useRef<HTMLDivElement>(null);
     const markerPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -15,12 +16,14 @@ const Palette = () => {
     const [isPointerDown, setPointerDown] = useState(false);
 
     /**
-     * Moves marker.
+     * Moves marker and update color state.
      */
-    const moveMarker = useCallback(
+    const moveMarkerAndUpdateColor = useCallback(
         (e: PointerEvent | React.PointerEvent | null, keyboard = { x: 0, y: 0 }) => {
             const { x: markerX, y: markerY } = markerPosition.current;
-            let [x, y, width, height] = getBounds(paletteElement.current as HTMLDivElement);
+            const palette = paletteElement.current as HTMLDivElement;
+            let [x, y, width, height] = getBounds(palette);
+            let v: number, L: number;
 
             if (e) {
                 x = e.clientX - x;
@@ -36,9 +39,20 @@ const Palette = () => {
             if (x !== markerX || y !== markerY) {
                 markerPosition.current = { x, y };
                 translate(markerElement.current as HTMLDivElement, x, y);
+
+                v = 1 - y / height;
+                L = v * (1 - x / (2 * width));
+
+                updater(
+                    {
+                        S: L === 1 || L === 0 ? 0 : (v - L) / min(L, 1 - L),
+                        L,
+                    },
+                    palette
+                );
             }
         },
-        []
+        [updater]
     );
 
     /**
@@ -53,7 +67,7 @@ const Palette = () => {
 
         if (x || y) {
             e.preventDefault();
-            moveMarker(null, { x, y });
+            moveMarkerAndUpdateColor(null, { x, y });
         }
     };
 
@@ -64,7 +78,7 @@ const Palette = () => {
      */
     const dragStart: React.PointerEventHandler<HTMLDivElement> = (e) => {
         setPointerDown(true);
-        moveMarker(e);
+        moveMarkerAndUpdateColor(e);
     };
 
     useEffect(() => {
@@ -75,7 +89,7 @@ const Palette = () => {
          */
         const dragMove = (e: PointerEvent) => {
             if (isPointerDown) {
-                moveMarker(e);
+                moveMarkerAndUpdateColor(e);
             }
         };
 
