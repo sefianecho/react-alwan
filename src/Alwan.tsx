@@ -169,7 +169,7 @@ const Alwan = ({
         >
             <Palette updater={update} color={color} canUpdate={updatePaletteAndSliders.current} />
             <Container>
-                <Utility preview={preview} copy={copy} color={color} />
+                <Utility preview={preview} copy={copy} color={color} format={currentFormat} />
                 <Sliders opacity={opacity} updater={update} color={color} />
             </Container>
             <Inputs

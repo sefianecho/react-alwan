@@ -240,6 +240,7 @@ export interface utilityProps {
     color: colorState;
     copy: boolean;
     preview: boolean;
+    format: colorFormat;
 }
 
 export interface slidersProps {
