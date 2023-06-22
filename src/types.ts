@@ -245,6 +245,7 @@ export interface inputsProps {
 }
 
 export interface swatchesProps {
+    updater: colorUpdaterFromValue;
     swatches: Color[];
     toggle: boolean;
 }

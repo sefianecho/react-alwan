@@ -7,7 +7,7 @@ import type { swatchesProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Swatches = ({ swatches, toggle }: swatchesProps) => {
+const Swatches = ({ swatches, toggle, updater }: swatchesProps) => {
     const [collapsed, setCollapsed] = useState(false);
 
     /**
@@ -27,6 +27,9 @@ const Swatches = ({ swatches, toggle }: swatchesProps) => {
                             key={index}
                             className='alwan__button alwan__swatch'
                             style={{ '--alwan-color': swatch } as React.CSSProperties}
+                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                updater(swatch, e.currentTarget);
+                            }}
                         ></button>
                     ))}
                 </div>

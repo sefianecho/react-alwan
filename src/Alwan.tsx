@@ -171,7 +171,7 @@ const Alwan = ({
                 updater={updateFromValue}
                 changeFormat={(format) => setCurrentFormat(format)}
             />
-            <Swatches swatches={swatches} toggle={toggleSwatches} />
+            <Swatches swatches={swatches} toggle={toggleSwatches} updater={updateFromValue} />
         </div>
     );
 
