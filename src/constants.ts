@@ -2,8 +2,12 @@ import type { colorFormat } from './types';
 
 export const ROOT = document;
 export const DOC_ELEMENT = ROOT.documentElement;
+export const POINTER_DOWN = 'pointerdown';
 export const POINTER_MOVE = 'pointermove';
 export const POINTER_UP = 'pointerup';
+export const KEY_DOWN = 'keydown';
+export const SCROLL = 'scroll';
+export const RESIZE = 'resize';
 /**
  * Move marker vertically using the keyboard arrow keys
  */

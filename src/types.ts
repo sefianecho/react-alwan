@@ -32,6 +32,36 @@ export interface alwanProps {
     toggle: boolean;
 
     /**
+     * Display the picker container as a pop-up (a box that floats on top of the page content),
+     * if it's false, picker container will be displayed as a block (embedded in the page's content).
+     *
+     * @default true
+     */
+    popover: boolean;
+
+    /**
+     * Set the position of the popper (if popover is set to true) relative to the reference element,
+     * the position has two values separated by a dash (-),
+     * the first value is the direction (top, bottom, right, left),
+     * the second value is the alignment (start, center, end), omitting this value will default to center.
+     * e.g. 'bottom-start': 'bottom' places the picker below the reference element,
+     * and 'start' aligns the left side of the container with the left side of the reference element.
+     * Note:
+     * If the picker container has no space to be placed, it will auto-position itself.
+     * based on the available space.
+     *
+     * @default 'bottom-start'
+     */
+    position: popoverPosition;
+
+    /**
+     * Set the gap (in pixels) between the picker container and the reference element.
+     *
+     * @default 0
+     */
+    margin: number;
+
+    /**
      * Preview the color.
      *
      * @default true
@@ -148,4 +178,17 @@ export interface inputsProps {
 export interface swatchesProps {
     swatches: Color[];
     toggle: boolean;
+}
+
+export interface popoverOptions {
+    margin?: number;
+    position?: popoverPosition;
+}
+export interface popoverFlipOrder {
+    [key: string]: number[];
+}
+export type popoverAutoUpdate = (update: () => void, isInViewport: () => boolean) => void;
+export interface Popover {
+    update(): void;
+    destroy(): void;
 }

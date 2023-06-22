@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './assets/alwan.scss';
 import Container from './components/Container';
 import Inputs from './components/Inputs';
@@ -6,14 +6,19 @@ import Palette from './components/Palette';
 import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
-import type { alwanProps, colorFormat, colorState } from './types';
-import { ALL_FORMATS, RGB_FORMAT } from './constants';
+import type { Popover, alwanProps, colorFormat, colorState } from './types';
+import { ALL_FORMATS, RGB_FORMAT, ROOT } from './constants';
+import { createPopover } from './lib/popover';
+import { createPortal } from 'react-dom';
 
 const Alwan = ({
     id,
     className,
     theme = 'light',
     toggle = true,
+    popover = true,
+    position = 'bottom-start',
+    margin = 0,
     preview = true,
     copy = true,
     opacity = true,
@@ -23,6 +28,10 @@ const Alwan = ({
     swatches = [],
     toggleSwatches = true,
 }: alwanProps) => {
+    const popoverInstance = useRef<Popover | null>(null);
+    const popoverReference = useRef<HTMLButtonElement>(null);
+    const popoverContainer = useRef<HTMLDivElement>(null);
+
     const [formats, setFormats] = useState<colorFormat[]>([]);
     const [currentFormat, setCurrentFormat] = useState<colorFormat>(format);
     const [isOpen, setOpen] = useState(false);
@@ -42,6 +51,51 @@ const Alwan = ({
     });
 
     /**
+     * Picker reference button.
+     */
+    const button = (
+        <button
+            type='button'
+            className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
+            /**
+             * Toggle color picker.
+             */
+            onClick={() => {
+                if (toggle) {
+                    setOpen(!isOpen);
+                }
+            }}
+            ref={popoverReference}
+        ></button>
+    );
+
+    /**
+     * Picker widget.
+     */
+    const alwan = (
+        <div
+            id={id}
+            className={`alwan${isOpen ? ' alwan--open' : ''}${popover ? ' alwan--popup' : ''}`}
+            data-theme={theme}
+            ref={popoverContainer}
+        >
+            <Palette />
+            <Container>
+                <Utility preview={preview} copy={copy} />
+                <Sliders opacity={opacity} />
+            </Container>
+            <Inputs
+                formats={formats}
+                format={currentFormat}
+                singleInput={singleInput}
+                opacity={opacity}
+                changeFormat={(format) => setCurrentFormat(format)}
+            />
+            <Swatches swatches={swatches} toggle={toggleSwatches} />
+        </div>
+    );
+
+    /**
      * Update input formats and current format index.
      */
     useEffect(() => {
@@ -52,35 +106,36 @@ const Alwan = ({
         setCurrentFormat(formats.includes(format) ? format : RGB_FORMAT);
     }, [inputs, format]);
 
+    /**
+     * Create popover.
+     */
+    useEffect(() => {
+        if (popover) {
+            const reference = popoverReference.current as HTMLButtonElement;
+            const container = popoverContainer.current as HTMLDivElement;
+            popoverInstance.current = createPopover(
+                reference,
+                container,
+                { margin, position },
+                (update, isInViewport) => {
+                    // todo.
+                },
+                (e) => {
+                    // todo.
+                }
+            );
+        }
+
+        return () => {
+            popoverInstance.current?.destroy();
+            popoverInstance.current = null;
+        };
+    }, [popover, margin, position]);
+
     return (
         <>
-            <button
-                type='button'
-                className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
-                /**
-                 * Toggle color picker.
-                 */
-                onClick={() => {
-                    if (toggle) {
-                        setOpen(!isOpen);
-                    }
-                }}
-            ></button>
-            <div id={id} className={`alwan${isOpen ? ' alwan--open' : ''}`} data-theme={theme}>
-                <Palette />
-                <Container>
-                    <Utility preview={preview} copy={copy} />
-                    <Sliders opacity={opacity} />
-                </Container>
-                <Inputs
-                    formats={formats}
-                    format={currentFormat}
-                    singleInput={singleInput}
-                    opacity={opacity}
-                    changeFormat={(format) => setCurrentFormat(format)}
-                />
-                <Swatches swatches={swatches} toggle={toggleSwatches} />
-            </div>
+            {popover || toggle ? button : null}
+            {popover ? createPortal(alwan, ROOT.body) : alwan}
         </>
     );
 };

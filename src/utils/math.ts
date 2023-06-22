@@ -1,4 +1,5 @@
-export const { min, max } = Math;
+export const { min, max, abs, round } = Math;
+export const { parseFloat: float, parseInt: int, isFinite: isNumeric } = Number;
 
 /**
  * Keeps a number in a range.

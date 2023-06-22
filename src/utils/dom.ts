@@ -1,4 +1,4 @@
-import { DOC_ELEMENT } from '../constants';
+import { DOC_ELEMENT, ROOT } from '../constants';
 import type { DOMRectArray } from '../types';
 
 /**
@@ -30,4 +30,28 @@ export const getBounds = (element: Element | Document): DOMRectArray => {
  */
 export const translate = (element: HTMLElement, x: number, y: number) => {
     element.style.transform = `translate(${x}px,${y}px)`;
+};
+
+/**
+ * Gets overflow ancestor of an element (body element is not included).
+ *
+ * @param element - Target element.
+ * @param ancestors - Initial overflow ancestors.
+ * @returns - Overflow ancestors.
+ */
+export const getOverflowAncestors = (
+    element: Element | null,
+    ancestors: Array<Document | Element> = [ROOT]
+): Array<Document | Element> => {
+    element = element && element.parentElement;
+
+    if (!element || element === ROOT.body) {
+        return ancestors;
+    }
+
+    if (/auto|scroll|overlay|clip|hidden/.test(getComputedStyle(element).overflow)) {
+        ancestors.push(element);
+    }
+
+    return getOverflowAncestors(element, ancestors);
 };
