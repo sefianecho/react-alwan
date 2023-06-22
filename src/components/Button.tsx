@@ -5,7 +5,15 @@ import type { buttonProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Button = ({ children, className, onClick, onMouseLeave, onBlur, disabled }: buttonProps) => (
+const Button = ({
+    children,
+    className,
+    style,
+    onClick,
+    onMouseLeave,
+    onBlur,
+    disabled,
+}: buttonProps) => (
     <button
         type='button'
         className={`alwan__button ${className}`}
@@ -13,6 +21,7 @@ const Button = ({ children, className, onClick, onMouseLeave, onBlur, disabled }
         onMouseLeave={onMouseLeave}
         onBlur={onBlur}
         disabled={disabled}
+        style={style}
     >
         {children}
     </button>

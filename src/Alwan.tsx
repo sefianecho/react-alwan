@@ -9,7 +9,6 @@ import Utility from './components/Utility';
 import type { alwanProps, colorFormat, colorState } from './types';
 import Button from './components/Button';
 import { ALL_FORMATS, RGB_FORMAT } from './constants';
-import { max } from './utils/math';
 
 const Alwan = ({
     id,
@@ -22,6 +21,8 @@ const Alwan = ({
     inputs = true,
     format = 'rgb',
     singleInput = false,
+    swatches = [],
+    toggleSwatches = true,
 }: alwanProps) => {
     const [formats, setFormats] = useState<colorFormat[]>([]);
     const [currentFormat, setCurrentFormat] = useState<colorFormat>(format);
@@ -78,7 +79,7 @@ const Alwan = ({
                     opacity={opacity}
                     changeFormat={(format) => setCurrentFormat(format)}
                 />
-                <Swatches />
+                <Swatches swatches={swatches} toggle={toggleSwatches} />
             </div>
         </>
     );

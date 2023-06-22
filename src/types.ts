@@ -73,6 +73,20 @@ export interface alwanProps {
      * @default 'rgb'
      */
     format: colorFormat;
+
+    /**
+     * Array of color swatches, invalid values will default to rgb(0,0,0).
+     *
+     * @default []
+     */
+    swatches: Color[];
+
+    /**
+     * Make swatches container collapsible.
+     *
+     * @default false
+     */
+    toggleSwatches: boolean;
 }
 
 export interface RGB {
@@ -100,6 +114,8 @@ export interface colorState extends RGBA, HSL {
     hsl: string;
     hex: string;
 }
+
+export type Color = string | RGB | RGBA | HSL | HSLA;
 
 export type DOMRectArray = [
     x: number,
@@ -134,4 +150,9 @@ export interface inputsProps {
     singleInput: boolean;
     opacity: boolean;
     changeFormat: (format: colorFormat) => void;
+}
+
+export interface swatchesProps {
+    swatches: Color[];
+    toggle: boolean;
 }
