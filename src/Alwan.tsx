@@ -129,7 +129,7 @@ const Alwan = ({
             <Palette updater={update} />
             <Container>
                 <Utility preview={preview} copy={copy} />
-                <Sliders opacity={opacity} />
+                <Sliders opacity={opacity} updater={update} />
             </Container>
             <Inputs
                 formats={formats}

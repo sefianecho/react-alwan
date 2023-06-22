@@ -227,6 +227,7 @@ export interface utilityProps {
 
 export interface slidersProps {
     opacity: boolean;
+    updater: colorUpdater;
 }
 
 export interface inputsProps {
