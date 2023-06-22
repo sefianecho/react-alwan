@@ -6,10 +6,20 @@ import Palette from './components/Palette';
 import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
-import type { Popover, alwanProps, colorFormat, colorState, popoverAutoUpdate } from './types';
-import { ALL_FORMATS, RGB_FORMAT, ROOT } from './constants';
+import type {
+    Popover,
+    alwanProps,
+    colorFormat,
+    colorState,
+    colorUpdater,
+    popoverAutoUpdate,
+} from './types';
+import { ALL_FORMATS, HSL_FORMAT, RGB_FORMAT, ROOT } from './constants';
 import { createPopover } from './lib/popover';
 import { createPortal } from 'react-dom';
+import { round } from './utils/math';
+import { HSLToRGB, RGBToHEX } from './colors/converter';
+import { stringify } from './colors/stringify';
 
 const Alwan = ({
     id,
@@ -33,6 +43,8 @@ const Alwan = ({
     const popoverReference = useRef<HTMLButtonElement>(null);
     const popoverContainer = useRef<HTMLDivElement>(null);
 
+    const updatePaletteAndSliders = useRef(false);
+
     const [formats, setFormats] = useState<colorFormat[]>([]);
     const [currentFormat, setCurrentFormat] = useState<colorFormat>(format);
     const [isOpen, setOpen] = useState(false);
@@ -40,6 +52,9 @@ const Alwan = ({
         h: 0,
         s: 0,
         l: 0,
+
+        S: 0,
+        L: 0,
 
         r: 0,
         g: 0,
@@ -49,7 +64,38 @@ const Alwan = ({
         rgb: '',
         hsl: '',
         hex: '',
+        opaque: '',
     });
+
+    /**
+     * Updates color state.
+     *
+     * @param hsl - HSL color components.
+     * @param source - Element that updating the color.
+     * @param updateAll - Whether to update the palette and sliders.
+     * @param rgb - RGB color.
+     */
+    const update: colorUpdater = (hsl, source, updateAll = false, rgb) => {
+        updatePaletteAndSliders.current = updateAll;
+
+        setColor((color) => {
+            color = { ...color, ...hsl };
+            color = {
+                ...color,
+                ...{ s: round(color.S), l: round(color.L) },
+                ...(rgb || HSLToRGB(color)),
+            };
+
+            const [opaque, alphaHex] = RGBToHEX(color);
+
+            color.rgb = stringify(color, RGB_FORMAT);
+            color.hsl = stringify(color, HSL_FORMAT);
+            color.hex = opaque + alphaHex;
+            color.opaque = opaque;
+
+            return color;
+        });
+    };
 
     /**
      * Picker reference button.

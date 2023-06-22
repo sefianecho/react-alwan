@@ -129,29 +129,80 @@ export interface alwanProps {
 }
 
 export interface RGB {
+    /**
+     * Red.
+     */
     r: number;
+
+    /**
+     * Green.
+     */
     g: number;
+
+    /**
+     * Blue.
+     */
     b: number;
 }
 
-export interface RGBA extends RGB {
+interface A {
+    /**
+     * Alpha channel (opacity)
+     */
     a: number;
 }
 
+export interface RGBA extends RGB, A {}
+
 export interface HSL {
+    /**
+     * Hue.
+     */
     h: number;
+
+    /**
+     * Saturation.
+     */
     s: number;
+
+    /**
+     * Lightness.
+     */
     l: number;
 }
 
-export interface HSLA extends HSL {
-    a: number;
-}
+export interface HSLA extends HSL, A {}
 
 export interface colorState extends RGBA, HSL {
+    /**
+     * Saturation used internally its value is between 0-1.
+     */
+    S: number;
+
+    /**
+     * Lightness used internally its value is between 0-1.
+     */
+    L: number;
+
+    /**
+     * RGB color string.
+     */
     rgb: string;
+
+    /**
+     * HSL color string.
+     */
     hsl: string;
+
+    /**
+     * Hex color.
+     */
     hex: string;
+
+    /**
+     * Hex color without opacity.
+     */
+    opaque: string;
 }
 
 export type Color = string | RGB | RGBA | HSL | HSLA;
@@ -199,3 +250,15 @@ export interface Popover {
     update(): void;
     destroy(): void;
 }
+export interface internalHSL {
+    h?: number;
+    S?: number;
+    L?: number;
+    a?: number;
+}
+export type colorUpdater = (
+    hsl: internalHSL,
+    source?: HTMLElement,
+    updateAll?: boolean,
+    rgb?: RGBA
+) => void;
