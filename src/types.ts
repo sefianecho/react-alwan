@@ -1,3 +1,5 @@
+export type colorFormat = 'rgb' | 'hsl' | 'hex';
+
 export interface alwanProps {
     /**
      * Set the container's (widget) id.
@@ -47,6 +49,30 @@ export interface alwanProps {
      * @default true
      */
     opacity: boolean;
+
+    /**
+     * For the formats 'hsl' and 'rgb', choose a single input to display the color string,
+     * or if false, display an input for each color channel.
+     *
+     * @default false
+     */
+    singleInput: boolean;
+
+    /**
+     * Input(s) field(s) for each color format. if this option is set to true then all formats are,
+     * selected.
+     *
+     * @default { rgb: true, hsl: true, hex: true }
+     *
+     */
+    inputs: boolean | Partial<Record<colorFormat, boolean>>;
+
+    /**
+     * Initial color format.
+     *
+     * @default 'rgb'
+     */
+    format: colorFormat;
 }
 
 export interface RGB {
@@ -99,5 +125,12 @@ export interface utilityProps {
 }
 
 export interface slidersProps {
+    opacity: boolean;
+}
+
+export interface inputsProps {
+    formats: colorFormat[];
+    format: colorFormat;
+    singleInput: boolean;
     opacity: boolean;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './assets/alwan.scss';
 import Container from './components/Container';
 import Inputs from './components/Inputs';
@@ -6,8 +6,10 @@ import Palette from './components/Palette';
 import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
-import type { alwanProps, colorState } from './types';
+import type { alwanProps, colorFormat, colorState } from './types';
 import Button from './components/Button';
+import { ALL_FORMATS, RGB_FORMAT } from './constants';
+import { max } from './utils/math';
 
 const Alwan = ({
     id,
@@ -17,7 +19,12 @@ const Alwan = ({
     preview = true,
     copy = true,
     opacity = true,
+    inputs = true,
+    format = 'rgb',
+    singleInput = false,
 }: alwanProps) => {
+    const [formats, setFormats] = useState<colorFormat[]>([]);
+    const [currentFormat, setCurrentFormat] = useState<colorFormat>(format);
     const [isOpen, setOpen] = useState(false);
     const [color, setColor] = useState<colorState>({
         h: 0,
@@ -33,6 +40,17 @@ const Alwan = ({
         hsl: '',
         hex: '',
     });
+
+    /**
+     * Update input formats and current format index.
+     */
+    useEffect(() => {
+        const formats =
+            inputs === true ? ALL_FORMATS : ALL_FORMATS.filter((format) => (inputs || {})[format]);
+
+        setFormats(formats);
+        setCurrentFormat(formats.includes(format) ? format : RGB_FORMAT);
+    }, [inputs, format]);
 
     return (
         <>
@@ -53,7 +71,12 @@ const Alwan = ({
                     <Utility preview={preview} copy={copy} />
                     <Sliders opacity={opacity} />
                 </Container>
-                <Inputs />
+                <Inputs
+                    formats={formats}
+                    format={currentFormat}
+                    singleInput={singleInput}
+                    opacity={opacity}
+                />
                 <Swatches />
             </div>
         </>

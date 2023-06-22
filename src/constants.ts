@@ -1,3 +1,5 @@
+import type { colorFormat } from './types';
+
 export const ROOT = document;
 export const DOC_ELEMENT = ROOT.documentElement;
 export const POINTER_MOVE = 'pointermove';
@@ -17,3 +19,9 @@ export const KEYBOARD_X: { [key: string]: number } = {
     ArrowRight: 1,
     ArrowLeft: -1,
 };
+
+export const RGB_FORMAT: colorFormat = 'rgb';
+export const HSL_FORMAT: colorFormat = 'hsl';
+export const HEX_FORMAT: colorFormat = 'hex';
+
+export const ALL_FORMATS: colorFormat[] = [RGB_FORMAT, HSL_FORMAT, HEX_FORMAT];
