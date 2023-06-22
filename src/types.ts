@@ -1,4 +1,6 @@
 export type colorFormat = 'rgb' | 'hsl' | 'hex';
+type side = 'top' | 'right' | 'bottom' | 'left';
+export type popoverPosition = side | `${side}-${'start' | 'center' | 'end'}`;
 
 export interface alwanProps {
     /**
@@ -125,15 +127,6 @@ export type DOMRectArray = [
     right: number,
     bottom: number
 ];
-
-export interface buttonProps extends React.PropsWithChildren {
-    className?: string;
-    onClick?: (ev: React.MouseEvent) => void;
-    onMouseLeave?: (ev: React.MouseEvent) => void;
-    onBlur?: () => void;
-    disabled?: boolean;
-    style?: React.CSSProperties;
-}
 
 export interface utilityProps {
     copy: boolean;

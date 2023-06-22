@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { switchInputsSVG } from '../assets/svg/icons';
 import type { inputsProps } from '../types';
-import Button from './Button';
 import Container from './Container';
 import { HEX_FORMAT } from '../constants';
 
@@ -47,7 +46,11 @@ const Inputs = ({ formats, format, singleInput, opacity, changeFormat }: inputsP
                         </label>
                     ))}
                 </div>
-                {length > 1 ? <Button onClick={handleClick}>{switchInputsSVG}</Button> : null}
+                {length > 1 ? (
+                    <button type='button' className='alwan__button' onClick={handleClick}>
+                        {switchInputsSVG}
+                    </button>
+                ) : null}
             </Container>
         );
     }

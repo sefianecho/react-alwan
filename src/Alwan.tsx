@@ -7,7 +7,6 @@ import Sliders from './components/Sliders';
 import Swatches from './components/Swatches';
 import Utility from './components/Utility';
 import type { alwanProps, colorFormat, colorState } from './types';
-import Button from './components/Button';
 import { ALL_FORMATS, RGB_FORMAT } from './constants';
 
 const Alwan = ({
@@ -55,8 +54,9 @@ const Alwan = ({
 
     return (
         <>
-            <Button
-                className={`alwan__preset-button${className ? ' ' + className : ''}`}
+            <button
+                type='button'
+                className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
                 /**
                  * Toggle color picker.
                  */
@@ -65,7 +65,7 @@ const Alwan = ({
                         setOpen(!isOpen);
                     }
                 }}
-            />
+            ></button>
             <div id={id} className={`alwan${isOpen ? ' alwan--open' : ''}`} data-theme={theme}>
                 <Palette />
                 <Container>

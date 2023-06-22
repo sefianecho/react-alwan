@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { caretSVG } from '../assets/svg/icons';
-import Button from './Button';
 import type { swatchesProps } from '../types';
 
 /**
@@ -23,19 +22,21 @@ const Swatches = ({ swatches, toggle }: swatchesProps) => {
             <>
                 <div className={`alwan__swatches${collapsed ? ' alwan--collapse' : ''}`}>
                     {swatches.map((swatch, index) => (
-                        <Button
+                        <button
+                            type='button'
                             key={index}
-                            className='alwan__swatch'
+                            className='alwan__button alwan__swatch'
                             style={{ '--alwan-color': swatch } as React.CSSProperties}
-                        />
+                        ></button>
                     ))}
                 </div>
                 {toggle ? (
                     /**
                      * Toggle button.
                      */
-                    <Button
-                        className='alwan__toggle-button'
+                    <button
+                        type='button'
+                        className='alwan__button alwan__toggle-button'
                         /**
                          * Toggle collapse swatches container.
                          */
@@ -44,26 +45,13 @@ const Swatches = ({ swatches, toggle }: swatchesProps) => {
                         }}
                     >
                         {caretSVG}
-                    </Button>
+                    </button>
                 ) : null}
             </>
         );
     }
 
     return null;
-
-    return (
-        <>
-            <div className='alwan__swatches'>
-                <Button className='alwan__swatch' />
-                <Button className='alwan__swatch' />
-                <Button className='alwan__swatch' />
-                <Button className='alwan__swatch' />
-            </div>
-
-            <Button className='alwan__toggle-button'>{caretSVG}</Button>
-        </>
-    );
 };
 
 export default Swatches;
