@@ -6,7 +6,7 @@ import type { slidersProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Sliders = ({ opacity, updater, color }: slidersProps) => {
+const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
     /**
      * Updates color state.
      *
@@ -37,6 +37,7 @@ const Sliders = ({ opacity, updater, color }: slidersProps) => {
                 max={360}
                 value={360 - color.h}
                 onChange={(e) => handleChange(e, 'h')}
+                disabled={disabled}
             />
             {opacity ? (
                 <input
@@ -47,6 +48,7 @@ const Sliders = ({ opacity, updater, color }: slidersProps) => {
                     max={1}
                     step={0.01}
                     onChange={(e) => handleChange(e, 'a')}
+                    disabled={disabled}
                 />
             ) : null}
         </div>

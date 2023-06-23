@@ -7,7 +7,7 @@ import type { swatchesProps } from '../types';
  *
  * @param param0 - Props.
  */
-const Swatches = ({ swatches, toggle, updater }: swatchesProps) => {
+const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
     const [collapsed, setCollapsed] = useState(false);
 
     /**
@@ -30,6 +30,7 @@ const Swatches = ({ swatches, toggle, updater }: swatchesProps) => {
                             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                 updater(swatch, e.currentTarget);
                             }}
+                            disabled={disabled}
                         ></button>
                     ))}
                 </div>
@@ -46,6 +47,7 @@ const Swatches = ({ swatches, toggle, updater }: swatchesProps) => {
                         onClick={() => {
                             setCollapsed(!collapsed);
                         }}
+                        disabled={disabled}
                     >
                         {caretSVG}
                     </button>

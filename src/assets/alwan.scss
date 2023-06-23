@@ -58,7 +58,7 @@
         background: linear-gradient(to bottom, transparent, #000),
                     linear-gradient(to right, #fff, hsl(var(--alwan-h, 0), 100%, 50%));
 
-        &:focus .alwan__marker {
+        &:enabled:focus .alwan__marker {
             box-shadow: 0 0 1px 2px $alwan-focus-color;
         }
     }
@@ -243,6 +243,11 @@
             -webkit-appearance: none;
         }
 
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         &:focus {
             outline: 0;
             border-color: $alwan-focus-color;
@@ -252,7 +257,7 @@
             }
         }
 
-        &:hover {
+        &:enabled:hover {
             border-color: var(--alwan-input-hover-bc, $input-border-color-hover);
         }
     }

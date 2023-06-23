@@ -18,6 +18,7 @@ const Inputs = ({
     opacity,
     updater,
     changeFormat,
+    disabled,
 }: inputsProps) => {
     /**
      * Gets fields to build.
@@ -78,13 +79,19 @@ const Inputs = ({
                                 onBlur={() => {
                                     changing.current = false;
                                 }}
+                                disabled={disabled}
                             />
                             <span>{field}</span>
                         </label>
                     ))}
                 </div>
                 {length > 1 ? (
-                    <button type='button' className='alwan__button' onClick={handleClick}>
+                    <button
+                        type='button'
+                        className='alwan__button'
+                        onClick={handleClick}
+                        disabled={disabled}
+                    >
                         {switchInputsSVG}
                     </button>
                 ) : null}

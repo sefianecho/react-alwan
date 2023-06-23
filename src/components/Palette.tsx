@@ -8,7 +8,7 @@ import type { paletteProps } from '../types';
 /**
  * Color picking area. pick color by dragging the marker (picker).
  */
-const Palette = ({ updater, color, canUpdate }: paletteProps) => {
+const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
     const paletteElement = useRef<HTMLDivElement>(null);
     const markerElement = useRef<HTMLDivElement>(null);
     const markerPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -77,8 +77,10 @@ const Palette = ({ updater, color, canUpdate }: paletteProps) => {
      * @param e - Event.
      */
     const dragStart: React.PointerEventHandler<HTMLDivElement> = (e) => {
-        setPointerDown(true);
-        moveMarkerAndUpdateColor(e);
+        if (!disabled) {
+            setPointerDown(true);
+            moveMarkerAndUpdateColor(e);
+        }
     };
 
     /**

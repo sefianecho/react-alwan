@@ -40,6 +40,7 @@ const Alwan = ({
     copy = true,
     opacity = true,
     inputs = true,
+    disabled = false,
     format = 'rgb',
     singleInput = false,
     swatches = [],
@@ -51,7 +52,7 @@ const Alwan = ({
     const popoverReference = useRef<HTMLButtonElement>(null);
     const popoverContainer = useRef<HTMLDivElement>(null);
 
-    const updatePaletteAndSliders = useRef(false);
+    const updatePalette = useRef(false);
 
     const [formats, setFormats] = useState<colorFormat[]>([]);
     const [currentFormat, setCurrentFormat] = useState<colorFormat>(format);
@@ -85,39 +86,41 @@ const Alwan = ({
      */
     const update: colorUpdater = useCallback(
         (hsl, source, updateAll = false, rgb) => {
-            updatePaletteAndSliders.current = updateAll;
+            if (!disabled) {
+                updatePalette.current = updateAll;
 
-            setColor((color) => {
-                const { r, g, b, a } = color;
+                setColor((color) => {
+                    const { r, g, b, a } = color;
 
-                color = { ...color, ...hsl };
-                color = {
-                    ...color,
-                    s: round(color.S * 100),
-                    l: round(color.L * 100),
-                    ...(rgb || HSLToRGB(color)),
-                };
+                    color = { ...color, ...hsl };
+                    color = {
+                        ...color,
+                        s: round(color.S * 100),
+                        l: round(color.L * 100),
+                        ...(rgb || HSLToRGB(color)),
+                    };
 
-                const [opaque, alphaHex] = RGBToHEX(color);
+                    const [opaque, alphaHex] = RGBToHEX(color);
 
-                color.rgb = stringify(color, RGB_FORMAT);
-                color.hsl = stringify(color, HSL_FORMAT);
-                color.hex = opaque + alphaHex;
-                color.opaque = opaque;
+                    color.rgb = stringify(color, RGB_FORMAT);
+                    color.hsl = stringify(color, HSL_FORMAT);
+                    color.hex = opaque + alphaHex;
+                    color.opaque = opaque;
 
-                // Fire onChange if at least one of the rgba components changes.
-                if (
-                    source &&
-                    onChange &&
-                    (color.r !== r || color.g !== g || color.b !== b || color.a !== a)
-                ) {
-                    onChange(event(color, 'change', source));
-                }
+                    // Fire onChange if at least one of the rgba components changes.
+                    if (
+                        source &&
+                        onChange &&
+                        (color.r !== r || color.g !== g || color.b !== b || color.a !== a)
+                    ) {
+                        onChange(event(color, 'change', source));
+                    }
 
-                return color;
-            });
+                    return color;
+                });
+            }
         },
-        [onChange]
+        [disabled, onChange]
     );
 
     /**
@@ -179,6 +182,7 @@ const Alwan = ({
             type='button'
             className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
             style={{ '--alwan-color': color.rgb } as React.CSSProperties}
+            disabled={disabled}
             /**
              * Toggle color picker.
              */
@@ -200,10 +204,21 @@ const Alwan = ({
             data-theme={theme}
             ref={popoverContainer}
         >
-            <Palette updater={update} color={color} canUpdate={updatePaletteAndSliders.current} />
+            <Palette
+                updater={update}
+                color={color}
+                canUpdate={updatePalette.current}
+                disabled={disabled}
+            />
             <Container>
-                <Utility preview={preview} copy={copy} color={color} format={currentFormat} />
-                <Sliders opacity={opacity} updater={update} color={color} />
+                <Utility
+                    preview={preview}
+                    copy={copy}
+                    color={color}
+                    format={currentFormat}
+                    disabled={disabled}
+                />
+                <Sliders opacity={opacity} updater={update} color={color} disabled={disabled} />
             </Container>
             <Inputs
                 color={color}
@@ -213,8 +228,14 @@ const Alwan = ({
                 opacity={opacity}
                 updater={updateFromValue}
                 changeFormat={(format) => setCurrentFormat(format)}
+                disabled={disabled}
             />
-            <Swatches swatches={swatches} toggle={toggleSwatches} updater={updateFromValue} />
+            <Swatches
+                swatches={swatches}
+                toggle={toggleSwatches}
+                updater={updateFromValue}
+                disabled={disabled}
+            />
         </div>
     );
 

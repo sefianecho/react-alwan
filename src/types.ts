@@ -83,6 +83,13 @@ export interface alwanProps {
     opacity?: boolean;
 
     /**
+     * Disable the picker, users won't be able to pick colors.
+     *
+     * @default false
+     */
+    disabled: boolean;
+
+    /**
      * Color picker value.
      *
      * @default '#000'
@@ -241,6 +248,7 @@ export interface paletteProps {
      * Can palette update the marker position from color state.
      */
     canUpdate: boolean;
+    disabled: boolean;
 }
 
 export interface utilityProps {
@@ -248,12 +256,14 @@ export interface utilityProps {
     copy: boolean;
     preview: boolean;
     format: colorFormat;
+    disabled: boolean;
 }
 
 export interface slidersProps {
     opacity: boolean;
     updater: colorUpdater;
     color: colorState;
+    disabled: boolean;
 }
 
 export interface inputsProps {
@@ -264,12 +274,14 @@ export interface inputsProps {
     opacity: boolean;
     updater: colorUpdaterFromValue;
     changeFormat: (format: colorFormat) => void;
+    disabled: boolean;
 }
 
 export interface swatchesProps {
     updater: colorUpdaterFromValue;
     swatches: Color[];
     toggle: boolean;
+    disabled: boolean;
 }
 
 export interface popoverOptions {

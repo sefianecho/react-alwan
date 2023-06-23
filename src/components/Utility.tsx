@@ -9,7 +9,7 @@ import { ROOT } from '../constants';
  *
  * @param param0 - Props.
  */
-const Utility = ({ preview, copy, color, format }: utilityProps) => {
+const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
     const [isCopied, setCopied] = useState(false);
     const [isFallback, setFallback] = useState(false);
     const fallbackInput = useRef<HTMLInputElement | null>(null);
@@ -54,6 +54,7 @@ const Utility = ({ preview, copy, color, format }: utilityProps) => {
                 setCopied(false);
                 e.currentTarget.blur();
             }}
+            disabled={disabled}
         >
             {isCopied ? checkSVG : clipboardSVG}
         </button>
