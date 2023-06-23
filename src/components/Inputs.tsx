@@ -53,7 +53,7 @@ const Inputs = ({
         field: keyof colorState
     ) => {
         changing.current = true;
-        values.current[field] = value;
+        values.current = { ...color, [field]: value };
         updater(field === format ? value : stringify(values.current, format), target);
     };
 
