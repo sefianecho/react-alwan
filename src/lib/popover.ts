@@ -188,6 +188,7 @@ export const createPopover = (
 
     return {
         update,
+        isVisible,
         /**
          * Remove popover side effects.
          */

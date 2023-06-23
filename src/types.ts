@@ -308,6 +308,7 @@ export interface popoverFlipOrder {
 export type popoverAutoUpdate = (update: () => void, isInViewport: () => boolean) => void;
 export interface Popover {
     update(): void;
+    isVisible(): boolean;
     destroy(): void;
 }
 export interface internalHSL {

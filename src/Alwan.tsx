@@ -376,6 +376,29 @@ const Alwan = ({
         updateFromValue(value);
     }, [updateFromValue, value]);
 
+    /**
+     * Updates color picker visibility when disabled and toggle props change.
+     */
+    useEffect(() => {
+        if (disabled) {
+            // Disable alwan cause it to close when it's displayed as popover or
+            // can toggle.
+            if (popover || toggle) {
+                setOpen(false);
+            }
+        } else if (
+            // Open picker if toggle prop changed to true or picker became enabled and toggle
+            // is off.
+            // When it displayed as popover, only open it if the reference button is visible
+            // in the viewport.
+            !toggle &&
+            (!popover ||
+                (popover && popoverInstance.current && popoverInstance.current.isVisible()))
+        ) {
+            setOpen(true);
+        }
+    }, [disabled, popover, toggle]);
+
     return (
         <>
             {popover || toggle ? button : null}
