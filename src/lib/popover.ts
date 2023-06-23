@@ -53,7 +53,7 @@ export const createPopover = (
         margin = float(margin);
     }
     margin = isNumeric(margin) ? margin : 0;
-    const [side, alignment] = isString(position) ? position.split('') : [];
+    const [side, alignment] = isString(position) ? position.split('-') : [];
     const sidesFlipOrder = fallbackSides[side] || fallbackSides.bottom;
     const alignmentsFlipOrder = fallbackAlignments[alignment] || fallbackAlignments.center;
     const overflowAncestors = getOverflowAncestors(target);
@@ -187,7 +187,6 @@ export const createPopover = (
     popoverEvents('addEventListener');
 
     return {
-        update,
         isVisible,
         /**
          * Remove popover side effects.
