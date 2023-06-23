@@ -87,7 +87,7 @@ export interface alwanProps {
      *
      * @default false
      */
-    disabled: boolean;
+    disabled?: boolean;
 
     /**
      * Color picker value.
@@ -142,11 +142,25 @@ export interface alwanProps {
     closeOnScroll?: boolean;
 
     /**
-     * On Change event fired whenever the color changes.
+     * On Change event fires whenever the color changes.
      *
      * @default undefined;
      */
     onChange?: (ev: alwanEvent) => void;
+
+    /**
+     * On Open event fires whenever the color picker opens.
+     *
+     * @default undefined;
+     */
+    onOpen?: (ev: alwanEvent) => void;
+
+    /**
+     * On Change event fired whenever the color picker closes.
+     *
+     * @default undefined;
+     */
+    onClose?: (ev: alwanEvent) => void;
 }
 
 export interface RGB {

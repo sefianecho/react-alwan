@@ -10,6 +10,7 @@ import type {
     HSLA,
     Popover,
     RGBA,
+    alwanEvent,
     alwanEventType,
     alwanProps,
     colorFormat,
@@ -47,6 +48,8 @@ const Alwan = ({
     toggleSwatches = true,
     closeOnScroll = false,
     onChange,
+    onOpen,
+    onClose,
 }: alwanProps) => {
     const popoverInstance = useRef<Popover | null>(null);
     const popoverReference = useRef<HTMLButtonElement>(null);
@@ -130,7 +133,7 @@ const Alwan = ({
      * @param type - Event type.
      * @param source - Event source.
      */
-    const event = (color: colorState, type: alwanEventType, source?: HTMLElement) => ({
+    const event = (color: colorState, type: alwanEventType, source?: HTMLElement): alwanEvent => ({
         type,
         source,
         h: color.h,
@@ -350,6 +353,21 @@ const Alwan = ({
             popoverInstance.current = null;
         };
     }, [popover, margin, position, autoUpdate, popoverAccessibility]);
+
+    /**
+     * Fire open and close events.
+     * Gets color details (value) on open/close.
+     */
+    useEffect(() => {
+        setColor((color) => {
+            if (isOpen) {
+                onOpen && onOpen(event(color, 'open'));
+            } else {
+                onClose && onClose(event(color, 'close'));
+            }
+            return color;
+        });
+    }, [isOpen, onClose, onOpen]);
 
     /**
      * Update color from value Prop.
