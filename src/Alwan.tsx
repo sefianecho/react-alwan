@@ -252,7 +252,7 @@ const Alwan = ({
                 if (isInViewport()) {
                     if (isOpen) {
                         update();
-                        if (closeOnScroll) {
+                        if (closeOnScroll && toggle) {
                             setOpen(false);
                         }
                     } else {
@@ -264,7 +264,7 @@ const Alwan = ({
                 }
             }
         },
-        [isOpen, toggle, closeOnScroll]
+        [closeOnScroll, isOpen, toggle]
     );
 
     /**
@@ -329,9 +329,10 @@ const Alwan = ({
     useEffect(() => {
         const formats =
             inputs === true ? ALL_FORMATS : ALL_FORMATS.filter((format) => (inputs || {})[format]);
+        const validFormats = formats.length ? formats : ALL_FORMATS;
 
         setFormats(formats);
-        setCurrentFormat(formats.includes(format) ? format : RGB_FORMAT);
+        setCurrentFormat(validFormats.includes(format) ? format : validFormats[0]);
     }, [inputs, format]);
 
     /**
@@ -383,9 +384,8 @@ const Alwan = ({
         if (disabled) {
             // Disable alwan cause it to close when it's displayed as popover or
             // can toggle.
-            if (popover || toggle) {
-                setOpen(false);
-            }
+            // Open the color picker if popover and toggler both became false.
+            setOpen(!popover && !toggle);
         } else if (
             // Open picker if toggle prop changed to true or picker became enabled and toggle
             // is off.
