@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Alwan from '../src/components/Alwan';
 import './App.scss';
 import { alwanProps, colorFormat } from '../src/types';
+import React from 'react';
 
 const App = () => {
     const [options, setOptions] = useState<alwanProps>({
