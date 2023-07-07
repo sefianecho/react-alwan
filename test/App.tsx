@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Alwan from '../src/Alwan';
+import Alwan from '../src/components/Alwan';
 import './App.scss';
 import { alwanProps, colorFormat } from '../src/types';
 

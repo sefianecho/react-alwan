@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import './assets/alwan.scss';
-import Container from './components/Container';
-import Inputs from './components/Inputs';
-import Palette from './components/Palette';
-import Sliders from './components/Sliders';
-import Swatches from './components/Swatches';
-import Utility from './components/Utility';
+import '../assets/alwan.scss';
+import Container from './Container';
+import Inputs from './Inputs';
+import Palette from './Palette';
+import Sliders from './Sliders';
+import Swatches from './Swatches';
+import Utility from './Utility';
 import type {
     HSLA,
     Popover,
@@ -19,14 +19,14 @@ import type {
     colorUpdaterFromValue,
     internalHSL,
     popoverAutoUpdate,
-} from './types';
-import { ALL_FORMATS, DEFAULT_COLOR, HSL_FORMAT, RGB_FORMAT, ROOT } from './constants';
-import { createPopover } from './lib/popover';
+} from '../types';
+import { ALL_FORMATS, DEFAULT_COLOR, HSL_FORMAT, RGB_FORMAT, ROOT } from '../constants';
+import { createPopover } from '../lib/popover';
 import { createPortal } from 'react-dom';
-import { round } from './utils/math';
-import { HSLToRGB, RGBToHEX, RGBToHSL } from './colors/converter';
-import { stringify } from './colors/stringify';
-import { parseColor } from './colors/parser';
+import { round } from '../utils/math';
+import { HSLToRGB, RGBToHEX, RGBToHSL } from '../colors/converter';
+import { stringify } from '../colors/stringify';
+import { parseColor } from '../colors/parser';
 
 const Alwan = ({
     id,
