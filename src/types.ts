@@ -289,6 +289,7 @@ export interface inputsProps {
     updater: colorUpdaterFromValue;
     changeFormat: (format: colorFormat) => void;
     disabled: boolean;
+    close(): void;
 }
 
 export interface swatchesProps {

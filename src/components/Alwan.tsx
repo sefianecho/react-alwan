@@ -232,6 +232,9 @@ const Alwan = ({
                 updater={updateFromValue}
                 changeFormat={(format) => setCurrentFormat(format)}
                 disabled={disabled}
+                close={() => {
+                    toggle && setOpen(false);
+                }}
             />
             <Swatches
                 swatches={swatches}

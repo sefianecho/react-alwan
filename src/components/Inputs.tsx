@@ -19,6 +19,7 @@ const Inputs = ({
     updater,
     changeFormat,
     disabled,
+    close,
 }: inputsProps) => {
     /**
      * Gets fields to build.
@@ -78,6 +79,9 @@ const Inputs = ({
                                 onChange={(e) => handleChange(e, field)}
                                 onBlur={() => {
                                     changing.current = false;
+                                }}
+                                onKeyDown={(e) => {
+                                    e.key === 'Enter' && close();
                                 }}
                                 disabled={disabled}
                             />
