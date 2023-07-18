@@ -1,1 +1,1 @@
-export * as Alwan from './components/Alwan';
+export { default } from './components/Alwan';
