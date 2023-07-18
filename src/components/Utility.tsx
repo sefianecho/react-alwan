@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { checkSVG, clipboardSVG } from '../assets/svg/icons';
 import type { utilityProps } from '../types';
 import { ROOT } from '../constants';
+import Button from './Button';
 
 /**
  * Previews and copies current color.
@@ -37,10 +38,10 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
     };
 
     const copyButton = copy ? (
-        <button
-            type='button'
-            className='alwan__button alwan__copy-button'
+        <Button
+            className='alwan__copy-button'
             onClick={handleClick}
+            disabled={disabled}
             /**
              * Reset icon to the clipboard.
              */
@@ -54,10 +55,9 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
                 setCopied(false);
                 e.currentTarget.blur();
             }}
-            disabled={disabled}
         >
             {isCopied ? checkSVG : clipboardSVG}
-        </button>
+        </Button>
     ) : null;
 
     /**

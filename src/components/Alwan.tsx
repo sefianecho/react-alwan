@@ -27,6 +27,7 @@ import { round } from '../utils/math';
 import { HSLToRGB, RGBToHEX, RGBToHSL } from '../colors/converter';
 import { stringify } from '../colors/stringify';
 import { parseColor } from '../colors/parser';
+import Button from './Button';
 
 const Alwan = ({
     id,
@@ -180,22 +181,18 @@ const Alwan = ({
      * Picker reference button.
      */
     const button = (
-        <button
+        <Button
             id={id}
-            type='button'
-            className={`alwan__button alwan__preset-button${className ? ' ' + className : ''}`}
+            ref={popoverReference}
+            className={`alwan__preset-button${className ? ' ' + className : ''}`}
             style={{ '--alwan-color': color.rgb } as React.CSSProperties}
             disabled={disabled}
-            /**
-             * Toggle color picker.
-             */
             onClick={() => {
                 if (toggle) {
                     setOpen(!isOpen);
                 }
             }}
-            ref={popoverReference}
-        ></button>
+        />
     );
 
     /**

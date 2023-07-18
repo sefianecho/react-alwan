@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { caretSVG } from '../assets/svg/icons';
 import type { swatchesProps } from '../types';
+import Button from './Button';
 
 /**
  * Creates color swatches buttons.
@@ -22,35 +23,30 @@ const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
             <>
                 <div className={`alwan__swatches${collapsed ? ' alwan--collapse' : ''}`}>
                     {swatches.map((swatch, index) => (
-                        <button
-                            type='button'
+                        <Button
                             key={index}
-                            className='alwan__button alwan__swatch'
+                            className='alwan__swatch'
                             style={{ '--alwan-color': swatch } as React.CSSProperties}
-                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                            onClick={(e) => {
                                 updater(swatch, e.currentTarget);
                             }}
                             disabled={disabled}
-                        ></button>
+                        />
                     ))}
                 </div>
                 {toggle ? (
                     /**
                      * Toggle button.
                      */
-                    <button
-                        type='button'
-                        className='alwan__button alwan__toggle-button'
-                        /**
-                         * Toggle collapse swatches container.
-                         */
+                    <Button
+                        className='alwan__toggle-button'
                         onClick={() => {
                             setCollapsed(!collapsed);
                         }}
                         disabled={disabled}
                     >
                         {caretSVG}
-                    </button>
+                    </Button>
                 ) : null}
             </>
         );

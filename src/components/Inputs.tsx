@@ -4,6 +4,7 @@ import { colorState, inputValues, type inputsProps } from '../types';
 import Container from './Container';
 import { HEX_FORMAT } from '../constants';
 import { stringify } from '../colors/stringify';
+import Button from './Button';
 
 /**
  * Color picker inputs.
@@ -90,14 +91,9 @@ const Inputs = ({
                     ))}
                 </div>
                 {length > 1 ? (
-                    <button
-                        type='button'
-                        className='alwan__button'
-                        onClick={handleClick}
-                        disabled={disabled}
-                    >
+                    <Button onClick={handleClick} disabled={disabled}>
                         {switchInputsSVG}
-                    </button>
+                    </Button>
                 ) : null}
             </Container>
         );
