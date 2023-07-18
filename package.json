@@ -1,20 +1,41 @@
 {
   "name": "react-alwan",
-  "private": true,
-  "version": "0.0.0",
+  "description": "A simple lightweight, customizable touch friendly color picker",
+  "version": "1.0.0",
   "type": "module",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "main": "dist/react-alwan.umd.cjs",
+  "module": "./dist/react-alwan.js",
+  ".": {
+    "import": "./dist/react-alwan.js",
+    "require": "./dist/react-alwan.umd.cjs"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "dependencies": {
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "color",
+    "picker",
+    "ui",
+    "ux",
+    "react",
+    "widget"
+  ],
+  "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "author": "Sefiane Chouaib <sefiane.chouaib@outlook.com>",
+  "author": "Sefiane Chouaib",
+  "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.3.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
@@ -23,8 +44,18 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.63.5",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
-  }
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SofianChouaib/react-alwan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SofianChouaib/react-alwan/issues"
+  },
+  "homepage": "https://github.com/SofianChouaib/react-alwan#readme"
 }
