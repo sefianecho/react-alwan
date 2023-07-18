@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { slidersProps } from '../types';
+import Slider from './Slider';
 
 /**
  * Hue and Alpha sliders.
@@ -31,18 +32,16 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
 
     return (
         <div className='alwan__sliders'>
-            <input
-                type='range'
-                className='alwan__slider alwan__slider--hue'
+            <Slider
+                type='hue'
                 max={360}
                 value={360 - color.h}
                 onChange={(e) => handleChange(e, 'h')}
                 disabled={disabled}
             />
             {opacity ? (
-                <input
-                    type='range'
-                    className='alwan__slider alwan__slider--alpha'
+                <Slider
+                    type='alpha'
                     style={{ '--alwan-rgb': color.opaque } as React.CSSProperties}
                     value={color.a}
                     max={1}
