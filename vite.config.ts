@@ -17,6 +17,13 @@ export default defineConfig(({ mode }) => ({
             lib: {
                 entry: path.resolve(__dirname, 'src/index.ts'),
                 name: 'alwan',
+                fileName(format) {
+                    const fileName = 'react-alwan.js';
+                    if (format === 'umd') {
+                        return 'umd/' + fileName;
+                    }
+                    return fileName;
+                },
             },
             sourcemap: true,
             emptyOutDir: true,

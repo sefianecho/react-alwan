@@ -5,11 +5,11 @@
   "type": "module",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
-  "main": "dist/react-alwan.umd.cjs",
+  "main": "dist/umd/react-alwan.js",
   "module": "./dist/react-alwan.js",
   ".": {
     "import": "./dist/react-alwan.js",
-    "require": "./dist/react-alwan.umd.cjs"
+    "require": "./dist/umd/react-alwan.js"
   },
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,7 @@
     "preview": "vite preview"
   },
   "files": [
-    "dist/"
+    "dist"
   ],
   "keywords": [
     "color",
