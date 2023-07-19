@@ -26,6 +26,10 @@ A simple, lightweight, customizable, touch friendly color picker for react libra
 -   Copy color to the clipboard.
 -   Lightweight.
 
+## Demo
+
+[Click here to try it](https://sofianchouaib.github.io/react-alwan/)
+
 ## Getting started
 
 ### Install using package manager
@@ -100,12 +104,43 @@ function App() {
 -   `opacity` (_default_ `true`) — Support alpha channel and display opacity slider.
 -   `disabled` (_default_ `false`) — Disable the picker, users won't be able to pick colors.
 -   `value` (_default_ `#000`) — Color picker value.
--   `singleInput` (_default_ `false`) — For the formats 'hsl' and 'rgb', choose a single input to display the color string, or if false, display an input for each color channel.
+-   `singleInput` (_default_ `false`) — For the formats 'hsl' and 'rgb', choose a single input to display the color string, or if false, display an input for each color component.
 -   `inputs` (_default_ `true`) — Input(s) field(s) for each color format. if this option is set to true then all formats are selected.
 -   `format` (_default_ `rgb`) — Initial color format.
--   `swatches` (_default_ `[]`) — Array of color swatches, invalid values will default to rgb(0, 0, 0).
+-   `swatches` (_default_ `[]`) — Array of color swatches, invalid values will be displayed as rgb(0, 0, 0).
 -   `toggleSwatches` (_default_ `false`) — Make swatches container collapsible.
 -   `closeOnScroll` (_default_ `false`) — Close the color picker when scrolling.
 -   `onChange` (_default_ `undefined`) — On Change event fires whenever the color changes.
 -   `onOpen` (_default_ `undefined`) — On Open event fires whenever the color picker opens.
 -   `onClose` (_default_ `undefined`) — On Change event fired whenever the color picker closes.
+
+## Events
+
+```javascript
+    <Alwan
+        onOpen={(ev) => { /* ... */ }}
+        onClose={(ev) => { /* ... */ }}
+        onChange={(ev) => {
+            ev.type // Event type `change`, `open` or `close`.
+            ev.source // Event source.
+
+            // HSL color components.
+            ev.h // Hue.
+            ev.s // Saturation.
+            ev.l // Lightness.
+
+            // RGB color components.
+            ev.r // Red.
+            ev.g // Green.
+            ev.b // Blue.
+
+            ev.a // Alpha (opacity)
+
+            // Color string values.
+            ev.hex // Hex value.
+            ev.rgb // RGB string.
+            ev.hsl // HSL string.
+        }}
+    >
+
+```
