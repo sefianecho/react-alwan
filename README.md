@@ -53,7 +53,7 @@ yarn add react-alwan
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-alwan/dist/alwan.css" />
 
 <!-- Script -->
-<script src="https://cdn.jsdelivr.net/npm/alwan/dist/umd/react-alwan.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-alwan/dist/umd/react-alwan.js"></script>
 ```
 
 -   Unpkg CDN
