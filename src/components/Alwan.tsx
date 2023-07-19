@@ -46,7 +46,7 @@ const Alwan = ({
     format = 'rgb',
     singleInput = false,
     swatches = [],
-    toggleSwatches = true,
+    toggleSwatches = false,
     closeOnScroll = false,
     onChange,
     onOpen,

@@ -108,7 +108,7 @@ export interface alwanProps {
      * Input(s) field(s) for each color format. if this option is set to true then all formats are,
      * selected.
      *
-     * @default { rgb: true, hsl: true, hex: true }
+     * @default true
      *
      */
     inputs?: boolean | Partial<Record<colorFormat, boolean>>;
