@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { KEYBOARD_X, KEYBOARD_Y, POINTER_MOVE, POINTER_UP, ROOT } from '../constants';
+import {
+    KEYBOARD_X,
+    KEYBOARD_Y,
+    POINTER_MOVE,
+    POINTER_UP,
+    ROOT,
+} from '../constants';
 import { getBounds, translate } from '../utils/dom';
 import { boundNumber, min } from '../utils/math';
 import { createPortal } from 'react-dom';
@@ -19,7 +25,10 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
      * Moves marker and update color state.
      */
     const moveMarkerAndUpdateColor = useCallback(
-        (e: PointerEvent | React.PointerEvent | null, keyboard = { x: 0, y: 0 }) => {
+        (
+            e: PointerEvent | React.PointerEvent | null,
+            keyboard = { x: 0, y: 0 },
+        ) => {
             const { x: markerX, y: markerY } = markerPosition.current;
             const palette = paletteElement.current as HTMLDivElement;
             let [x, y, width, height] = getBounds(palette);
@@ -48,11 +57,11 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
                         S: L === 1 || L === 0 ? 0 : (v - L) / min(L, 1 - L),
                         L,
                     },
-                    palette
+                    palette,
                 );
             }
         },
-        [updater]
+        [updater],
     );
 
     /**
@@ -121,7 +130,9 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
      */
     useEffect(() => {
         if (canUpdate) {
-            const [, , width, height] = getBounds(paletteElement.current as HTMLDivElement);
+            const [, , width, height] = getBounds(
+                paletteElement.current as HTMLDivElement,
+            );
             const { S, L } = color;
             const v = L + S * min(L, 1 - L);
             const x = (v ? 2 * (1 - L / v) : 0) * width;
@@ -140,12 +151,15 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
                 onPointerDown={dragStart}
                 onKeyDown={handleKeyboard}
                 ref={paletteElement}
-                style={{ '--alwan-h': color.h } as React.CSSProperties}
+                style={{ '--h': color.h } as React.CSSProperties}
             >
                 <div className='alwan__marker' ref={markerElement}></div>
             </div>
             {isPointerDown
-                ? createPortal(<div className='alwan__backdrop'></div>, ROOT.body)
+                ? createPortal(
+                      <div className='alwan__backdrop'></div>,
+                      ROOT.body,
+                  )
                 : null}
         </>
     );

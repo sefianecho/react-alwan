@@ -21,12 +21,14 @@ const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
     if (Array.isArray(swatches) && swatches.length) {
         return (
             <>
-                <div className={`alwan__swatches${collapsed ? ' alwan--collapse' : ''}`}>
+                <div
+                    className={`alwan__swatches${collapsed ? ' alwan--collapse' : ''}`}
+                >
                     {swatches.map((swatch, index) => (
                         <Button
                             key={index}
                             className='alwan__swatch'
-                            style={{ '--alwan-color': swatch } as React.CSSProperties}
+                            style={{ '--color': swatch } as React.CSSProperties}
                             onClick={(e) => {
                                 updater(swatch, e.currentTarget);
                             }}

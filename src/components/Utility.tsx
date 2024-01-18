@@ -75,12 +75,7 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
     return (
         <>
             {preview ? (
-                <div
-                    className='alwan__preview'
-                    style={{ '--alwan-color': color.rgb } as React.CSSProperties}
-                >
-                    {copyButton}
-                </div>
+                <div className='alwan__preview'>{copyButton}</div>
             ) : (
                 copyButton
             )}{' '}
@@ -92,7 +87,7 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
                           defaultValue={color[format]}
                           ref={fallbackInput}
                       />,
-                      ROOT.body
+                      ROOT.body,
                   )
                 : null}
         </>

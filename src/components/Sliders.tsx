@@ -15,10 +15,19 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
      * @param channel - Color channel.
      */
     const handleChange = (
-        { target, target: { valueAsNumber } }: React.ChangeEvent<HTMLInputElement>,
-        channel: 'h' | 'a'
+        {
+            target,
+            target: { valueAsNumber },
+        }: React.ChangeEvent<HTMLInputElement>,
+        channel: 'h' | 'a',
     ) => {
-        updater({ [channel]: channel === 'h' ? 360 - valueAsNumber : valueAsNumber }, target);
+        updater(
+            {
+                [channel]:
+                    channel === 'h' ? 360 - valueAsNumber : valueAsNumber,
+            },
+            target,
+        );
     };
 
     /**
@@ -31,7 +40,7 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
     }, [opacity, updater]);
 
     return (
-        <div className='alwan__sliders'>
+        <div>
             <Slider
                 type='hue'
                 max={360}
@@ -42,7 +51,6 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
             {opacity ? (
                 <Slider
                     type='alpha'
-                    style={{ '--alwan-rgb': color.opaque } as React.CSSProperties}
                     value={color.a}
                     max={1}
                     step={0.01}

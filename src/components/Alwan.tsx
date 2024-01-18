@@ -1,11 +1,11 @@
-import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
-import "../assets/alwan.scss";
-import Container from "./Container";
-import Inputs from "./Inputs";
-import Palette from "./Palette";
-import Sliders from "./Sliders";
-import Swatches from "./Swatches";
-import Utility from "./Utility";
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
+import '../assets/alwan.scss';
+import Container from './Container';
+import Inputs from './Inputs';
+import Palette from './Palette';
+import Sliders from './Sliders';
+import Swatches from './Swatches';
+import Utility from './Utility';
 import type {
     HSLA,
     Popover,
@@ -19,37 +19,37 @@ import type {
     colorUpdaterFromValue,
     internalHSL,
     popoverAutoUpdate,
-} from "../types";
+} from '../types';
 import {
     ALL_FORMATS,
     DEFAULT_COLOR,
     HSL_FORMAT,
     RGB_FORMAT,
     ROOT,
-} from "../constants";
-import { createPopover } from "../lib/popover";
-import { createPortal } from "react-dom";
-import { round } from "../utils/math";
-import { HSLToRGB, RGBToHEX, RGBToHSL } from "../colors/converter";
-import { stringify } from "../colors/stringify";
-import { parseColor } from "../colors/parser";
-import Button from "./Button";
+} from '../constants';
+import { createPopover } from '../lib/popover';
+import { createPortal } from 'react-dom';
+import { round } from '../utils/math';
+import { HSLToRGB, RGBToHEX, RGBToHSL } from '../colors/converter';
+import { stringify } from '../colors/stringify';
+import { parseColor } from '../colors/parser';
+import Button from './Button';
 
 const Alwan = ({
     id,
     className,
-    theme = "light",
+    theme = 'light',
     toggle = true,
     value = DEFAULT_COLOR,
     popover = true,
-    position = "bottom-start",
+    position = 'bottom-start',
     margin = 0,
     preview = true,
     copy = true,
     opacity = true,
     inputs = true,
     disabled = false,
-    format = "rgb",
+    format = 'rgb',
     singleInput = false,
     swatches = [],
     toggleSwatches = false,
@@ -80,10 +80,10 @@ const Alwan = ({
         b: 0,
         a: 1,
 
-        rgb: "",
-        hsl: "",
-        hex: "",
-        opaque: "",
+        rgb: '',
+        hsl: '',
+        hex: '',
+        opaque: '',
     });
 
     /**
@@ -126,7 +126,7 @@ const Alwan = ({
                             color.b !== b ||
                             color.a !== a)
                     ) {
-                        onChange(event(color, "change", source));
+                        onChange(event(color, 'change', source));
                     }
 
                     return color;
@@ -197,8 +197,8 @@ const Alwan = ({
         <Button
             id={id}
             ref={popoverReference}
-            className={`alwan__reference${className ? " " + className : ""}`}
-            style={{ "--color": color.rgb } as React.CSSProperties}
+            className={`alwan__reference${className ? ' ' + className : ''}`}
+            style={{ '--color': color.rgb } as React.CSSProperties}
             disabled={disabled}
             onClick={() => {
                 if (toggle) {
@@ -213,13 +213,13 @@ const Alwan = ({
      */
     const alwan = (
         <div
-            className={`alwan${isOpen ? " alwan--open" : ""}`}
-            data-display={popover ? "popover" : "block"}
+            className={`alwan${isOpen ? ' alwan--open' : ''}`}
+            data-display={popover ? 'popover' : 'block'}
             data-theme={theme}
             style={
                 {
-                    "--rgb": `${color.r},${color.g},${color.b}`,
-                    "--a": color.a,
+                    '--rgb': `${color.r},${color.g},${color.b}`,
+                    '--a': color.a,
                 } as CSSProperties
             }
             ref={popoverContainer}
@@ -308,7 +308,7 @@ const Alwan = ({
 
                 if (
                     // Pressing the Escape key or Clicking away closes the popover.
-                    key === "Escape" ||
+                    key === 'Escape' ||
                     (target !== reference &&
                         ![...reference.labels].some((label) =>
                             label.contains(target),
@@ -318,10 +318,10 @@ const Alwan = ({
                     if (toggle) {
                         setOpen(false);
                     }
-                } else if (key === "Tab") {
+                } else if (key === 'Tab') {
                     const focusableElements = [
                         ...container.querySelectorAll<HTMLElement>(
-                            "button,input,[tabindex]",
+                            'button,input,[tabindex]',
                         ),
                     ];
                     const firstFocusableElement = focusableElements[0];
@@ -396,9 +396,9 @@ const Alwan = ({
     useEffect(() => {
         setColor((color) => {
             if (isOpen) {
-                onOpen && onOpen(event(color, "open"));
+                onOpen && onOpen(event(color, 'open'));
             } else {
-                onClose && onClose(event(color, "close"));
+                onClose && onClose(event(color, 'close'));
             }
             return color;
         });

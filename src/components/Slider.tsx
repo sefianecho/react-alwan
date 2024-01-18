@@ -1,6 +1,10 @@
-const Slider = (props: React.InputHTMLAttributes<HTMLInputElement> & { type: 'hue' | 'alpha' }) => (
+const Slider = (
+    props: React.InputHTMLAttributes<HTMLInputElement> & {
+        type: 'hue' | 'alpha';
+    },
+) => (
     <input
-        className={`alwan__slider alwan__slider--${props.type}`}
+        className={`alwan__slider alwan__${props.type}`}
         {...{ ...props, type: 'range' }}
     />
 );
