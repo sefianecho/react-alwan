@@ -15,9 +15,10 @@ const Swatches = ({
     toggle,
     updater,
     disabled,
+    popover,
     i18n: { swatches: swatchLabel, toggle: toggleButtonLabel },
 }: swatchesProps) => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [isCollapsed, setCollapsed] = useState(false);
 
     /**
      * Updates state if toggleSwatches changes.
@@ -26,11 +27,20 @@ const Swatches = ({
         setCollapsed(toggle);
     }, [toggle]);
 
+    /**
+     * Resposition popover after expanding or collapsing the swatches container.
+     */
+    useEffect(() => {
+        if (popover) {
+            popover.update();
+        }
+    }, [isCollapsed, popover]);
+
     if (Array.isArray(swatches) && swatches.length) {
         return (
             <>
                 <div
-                    className={`alwan__swatches${collapsed ? ' alwan--collapse' : ''}`}
+                    className={`alwan__swatches${isCollapsed ? ' alwan--collapse' : ''}`}
                 >
                     {swatches.map((swatch, index) => (
                         <Button
@@ -58,9 +68,7 @@ const Swatches = ({
                      */
                     <Button
                         className='alwan__toggle-button'
-                        onClick={() => {
-                            setCollapsed(!collapsed);
-                        }}
+                        onClick={() => setCollapsed(!isCollapsed)}
                         disabled={disabled}
                         aria-label={toggleButtonLabel}
                         title={toggleButtonLabel}

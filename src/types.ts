@@ -314,6 +314,7 @@ export interface swatchesProps {
     swatches: Color[];
     toggle: boolean;
     disabled: boolean;
+    popover: Popover | null;
     i18n: {
         swatches: string;
         toggle: string;
@@ -333,6 +334,7 @@ export type popoverAutoUpdate = (
     isScroll: boolean,
 ) => void;
 export interface Popover {
+    update(): void;
     isVisible(): boolean;
     destroy(): void;
 }

@@ -224,6 +224,7 @@ export const createPopover = (
     popoverEvents('addEventListener');
 
     return {
+        update,
         isVisible,
         /**
          * Remove popover side effects.

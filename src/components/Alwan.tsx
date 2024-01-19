@@ -232,6 +232,7 @@ const Alwan = ({
                 toggle={toggleSwatches}
                 updater={updateFromValue}
                 disabled={disabled}
+                popover={popoverInstance.current}
                 i18n={{
                     swatches: I18N.swatchBtn,
                     toggle: I18N.toggleSwatchesBtn,
