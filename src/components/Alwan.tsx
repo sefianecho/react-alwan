@@ -11,7 +11,6 @@ import type {
     Popover,
     RGBA,
     alwanEvent,
-    alwanEventType,
     alwanProps,
     colorFormat,
     colorState,
@@ -84,6 +83,7 @@ const Alwan = ({
         hsl: '',
         hex: '',
     });
+    const eventData = useRef<colorState>(color);
 
     /**
      * Updates color state.
@@ -111,8 +111,10 @@ const Alwan = ({
                 color.hsl = stringify(color, HSL_FORMAT);
                 color.hex = RGBToHEX(color);
 
+                eventData.current = color;
+
                 if (onChange && triggerChange && color.hex !== previousHex) {
-                    onChange(event(color, 'change'));
+                    onChange({ type: 'change', ...color });
                 }
 
                 return { ...color };
@@ -120,17 +122,6 @@ const Alwan = ({
         },
         [onChange],
     );
-
-    /**
-     * Generates event details (color value and components).
-     *
-     * @param color - color state.
-     * @param type - Event type.
-     */
-    const event = (color: colorState, type: alwanEventType): alwanEvent => ({
-        type,
-        ...color,
-    });
 
     /**
      * Updates color state from a color value (string or object).
@@ -376,14 +367,15 @@ const Alwan = ({
      * Gets color details (value) on open/close.
      */
     useEffect(() => {
-        setColor((color) => {
-            if (isOpen) {
-                onOpen && onOpen(event(color, 'open'));
-            } else {
-                onClose && onClose(event(color, 'close'));
-            }
-            return color;
-        });
+        const e: alwanEvent = {
+            type: isOpen ? 'open' : 'close',
+            ...eventData.current,
+        };
+        if (isOpen) {
+            onOpen && onOpen(e);
+        } else {
+            onClose && onClose(e);
+        }
     }, [isOpen, onClose, onOpen]);
 
     /**
