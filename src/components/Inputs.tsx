@@ -25,25 +25,22 @@ const Inputs = ({
     /**
      * Gets fields to build.
      */
-    const getFields = useCallback(
+    const createFieldsArray = useCallback(
         () =>
             (format === HEX_FORMAT || singleInput
                 ? [format]
-                : (format + (opacity ? 'a' : '')).split('')) as Array<keyof colorState>,
-        [format, opacity, singleInput]
+                : (format + (opacity ? 'a' : '')).split('')) as Array<
+                keyof colorState
+            >,
+        [format, opacity, singleInput],
     );
+
     const values = useRef<inputValues>({ ...color });
     // Used so inputs don't updates their values.
     const changing = useRef(false);
-    const [fields, setFields] = useState<Array<keyof colorState>>(getFields());
+    const [fields, setFields] =
+        useState<Array<keyof colorState>>(createFieldsArray());
     const length = formats.length;
-
-    /**
-     * Handles switch inputs button click.
-     */
-    const handleClick = () => {
-        changeFormat(formats[(formats.indexOf(format) + 1) % length]);
-    };
 
     /**
      * Handles inputs change.
@@ -52,20 +49,16 @@ const Inputs = ({
      * @param field - Input identifier.
      */
     const handleChange = (
-        { target, target: { value } }: React.ChangeEvent<HTMLInputElement>,
-        field: keyof colorState
+        { target: { value } }: React.ChangeEvent<HTMLInputElement>,
+        field: keyof colorState,
     ) => {
         changing.current = true;
         values.current = { ...color, [field]: value };
-        updater(field === format ? value : stringify(values.current, format), target);
+        updater(field === format ? value : stringify(values.current, format));
     };
 
-    /**
-     * Update fields.
-     */
-    useEffect(() => {
-        setFields(getFields());
-    }, [getFields]);
+    // Rebuild inputs if singleInput or format props change.
+    useEffect(() => setFields(createFieldsArray()), [createFieldsArray]);
 
     if (length) {
         return (
@@ -76,7 +69,11 @@ const Inputs = ({
                             <input
                                 type='text'
                                 className='alwan__input'
-                                value={changing.current ? values.current[field] : color[field]}
+                                value={
+                                    changing.current
+                                        ? values.current[field]
+                                        : color[field]
+                                }
                                 onChange={(e) => handleChange(e, field)}
                                 onBlur={() => {
                                     changing.current = false;
@@ -91,7 +88,15 @@ const Inputs = ({
                     ))}
                 </div>
                 {length > 1 ? (
-                    <Button onClick={handleClick} disabled={disabled}>
+                    <Button
+                        onClick={() => {
+                            // Update format.
+                            changeFormat(
+                                formats[(formats.indexOf(format) + 1) % length],
+                            );
+                        }}
+                        disabled={disabled}
+                    >
                         {switchInputsSVG}
                     </Button>
                 ) : null}

@@ -1,7 +1,7 @@
 import { DEFAULT_COLOR, HSL_FORMAT, RGB_FORMAT, ROOT } from '../constants';
-import type { Color, HSLA, RGBA, colorFormat, internalHSL } from '../types';
-import { isString, isset } from '../utils/is';
-import { PI, boundNumber, float, int, isNumeric, normalizeAngle, round } from '../utils/math';
+import type { Color, HSLA, RGBA, colorFormat } from '../types';
+import { isNumber, isString } from '../utils/is';
+import { PI, boundNumber, int, normalizeAngle, round } from '../utils/math';
 import { stringify } from './stringify';
 
 /**
@@ -11,6 +11,9 @@ const HSL_REGEX =
     /^hsla?\(\s*([+-]?\d*\.?\d+)(\w*)?\s*[\s,]\s*([+-]?\d*\.?\d+)%?\s*,?\s*([+-]?\d*\.?\d+)%?(?:\s*[/,]\s*([+-]?\d*\.?\d+)(%)?)?\s*\)?$/;
 const HEX_REGEX = /^#[0-9a-f]{6}$/i;
 
+const ctx = ROOT.createElement('canvas').getContext(
+    '2d',
+) as CanvasRenderingContext2D;
 /**
  * Used to convert non degrees angles to degrees.
  */
@@ -30,9 +33,9 @@ const ANGLE_COEFFICIENT_MAP: { [angle: string]: number } = {
  */
 export const parseColor = (
     color: Color,
-    asString = false
-): string | [color: (internalHSL & HSLA) | RGBA, format: colorFormat] => {
-    let parsedColor: (internalHSL & HSLA) | RGBA;
+    asString = false,
+): string | [color: HSLA | RGBA, format: colorFormat] => {
+    let parsedColor: HSLA | RGBA;
     let format: colorFormat | undefined;
     let str = '';
 
@@ -43,9 +46,9 @@ export const parseColor = (
     if (!isString(color)) {
         color = color || {};
         format = [RGB_FORMAT, HSL_FORMAT].find((format) => {
-            return format.split('').every((key) => {
-                return isNumeric((color as RGBA & HSLA)[key as keyof (RGBA & HSLA)]);
-            });
+            return format
+                .split('')
+                .every((key) => isNumber(color[key as keyof Color]));
         });
 
         if (format) {
@@ -55,10 +58,8 @@ export const parseColor = (
         str = color.trim();
     }
 
-    const [isHSL, hue, angle, saturation, lightness, alpha, percentage] = HSL_REGEX.exec(str) || [];
-    let a: number;
-    let s: number;
-    let l: number;
+    const [isHSL, h, angle, s, l, a = '1', percentage] =
+        HSL_REGEX.exec(str) || [];
     if (isHSL) {
         /**
          * Normalize values.
@@ -67,23 +68,19 @@ export const parseColor = (
          * it might has a unit 'turn', 'rad' (radians) or 'grad' (gradients),
          * If the hue has a unit other than deg, then convert it to degrees.
          */
-        s = round(boundNumber(float(saturation)));
-        l = round(boundNumber(float(lightness)));
-        a = isset(alpha) ? float(alpha) : 1;
         parsedColor = {
             h: normalizeAngle(
-                float(hue) * (ANGLE_COEFFICIENT_MAP[angle] ? ANGLE_COEFFICIENT_MAP[angle] : 1)
+                +h *
+                    (ANGLE_COEFFICIENT_MAP[angle]
+                        ? ANGLE_COEFFICIENT_MAP[angle]
+                        : 1),
             ),
-            s,
-            l,
-            S: s / 100,
-            L: l / 100,
-            a: boundNumber(percentage ? a / 100 : a, 1),
+            s: boundNumber(+s),
+            l: boundNumber(+l),
+            a: boundNumber(+a / (percentage ? 100 : 1), 1),
         };
         format = HSL_FORMAT;
     } else {
-        const ctx = ROOT.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-
         format = RGB_FORMAT;
 
         ctx.fillStyle = DEFAULT_COLOR;
@@ -105,7 +102,7 @@ export const parseColor = (
             // Parse rgb string into a rgb object.
             const [r, g, b, a] = (/\((.+)\)/.exec(str) as RegExpExecArray)[1]
                 .split(',')
-                .map((value) => float(value));
+                .map((value) => +value);
             parsedColor = { r, g, b, a };
         }
     }

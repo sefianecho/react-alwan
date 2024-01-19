@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { caretSVG } from '../assets/svg/icons';
 import type { swatchesProps } from '../types';
 import Button from './Button';
+import { parseColor } from '../colors/parser';
 
 /**
  * Creates color swatches buttons.
@@ -28,10 +29,12 @@ const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
                         <Button
                             key={index}
                             className='alwan__swatch'
-                            style={{ '--color': swatch } as React.CSSProperties}
-                            onClick={(e) => {
-                                updater(swatch, e.currentTarget);
-                            }}
+                            style={
+                                {
+                                    '--color': parseColor(swatch, true),
+                                } as React.CSSProperties
+                            }
+                            onClick={() => updater(swatch)}
                             disabled={disabled}
                         />
                     ))}

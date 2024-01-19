@@ -10,7 +10,7 @@ import Button from './Button';
  *
  * @param param0 - Props.
  */
-const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
+const Utility = ({ preview, copy, color, disabled }: utilityProps) => {
     const [isCopied, setCopied] = useState(false);
     const [isFallback, setFallback] = useState(false);
     const fallbackInput = useRef<HTMLInputElement | null>(null);
@@ -24,7 +24,7 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
 
             if (clipboard) {
                 clipboard
-                    .writeText(color[format])
+                    .writeText(color)
                     .then(() => {
                         setCopied(true);
                     })
@@ -84,7 +84,7 @@ const Utility = ({ preview, copy, color, format, disabled }: utilityProps) => {
                 ? createPortal(
                       <input
                           style={{ position: 'fixed', opacity: 0 }}
-                          defaultValue={color[format]}
+                          defaultValue={color}
                           ref={fallbackInput}
                       />,
                       ROOT.body,

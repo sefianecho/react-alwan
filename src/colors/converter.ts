@@ -1,4 +1,4 @@
-import type { RGB, RGBA, colorState, internalHSL } from '../types';
+import type { HSLA, RGB, RGBA, colorState } from '../types';
 import { abs, max, min, normalizeAngle, round } from '../utils/math';
 
 /**
@@ -11,18 +11,10 @@ const toHex = (number: number) => {
 };
 
 /**
- * Converts RGB color to hex.
- *
- * returns an array of two values, the hex string without the alpha channel,
- * and the alpha channel (in hexadecimal).
- *
- * The hex without alpha (opaque) is used to color the background of the alpha slider.
- *
- * @param {object} param0 - RGB color object.
+ * Converts RGB to Hex color format.
  */
-export const RGBToHEX = ({ r, g, b, a }: colorState): [hex: string, alpha: string] => {
-    return ['#' + toHex(r) + toHex(g) + toHex(b), a < 1 ? toHex(round(a * 255)) : ''];
-};
+export const RGBToHEX = ({ r, g, b, a }: colorState) =>
+    '#' + toHex(r) + toHex(g) + toHex(b) + (a < 1 ? toHex(round(a * 255)) : '');
 
 /**
  * Helper function used for converting HSL to RGB.
@@ -43,22 +35,24 @@ const fn = (k: number, s: number, l: number): number => {
  * @param param0 - HSL color object.
  * @returns - RGB color object.
  */
-export const HSLToRGB = ({ h, S, L }: colorState): RGB => {
+export const HSLToRGB = ({ h, s, l }: colorState): RGB => {
     h /= 30;
+    s /= 100;
+    l /= 100;
     return {
-        r: fn(h, S, L),
-        g: fn(h + 8, S, L),
-        b: fn(h + 4, S, L),
+        r: fn(h, s, l),
+        g: fn(h + 8, s, l),
+        b: fn(h + 4, s, l),
     };
 };
 
 /**
  * Converts RGB to HSL.
  *
- * @param {object} param0 - RGB color object.
- * @returns {object} - HSL color object.
+ * @param param0 - RGB color object.
+ * @returns - HSL color object.
  */
-export const RGBToHSL = ({ r, g, b, a }: RGBA): internalHSL => {
+export const RGBToHSL = ({ r, g, b, a }: RGBA): HSLA => {
     r /= 255;
     g /= 255;
     b /= 255;
@@ -66,22 +60,22 @@ export const RGBToHSL = ({ r, g, b, a }: RGBA): internalHSL => {
     const cMax = max(r, g, b);
     const cMin = min(r, g, b);
     const d = cMax - cMin;
-    const L = (cMax + cMin) / 2;
+    const l = (cMax + cMin) / 2;
     const h =
         d === 0
             ? 0
             : cMax === r
-            ? ((g - b) / d) % 6
-            : cMax === g
-            ? (b - r) / d + 2
-            : cMax === b
-            ? (r - g) / d + 4
-            : 0;
+              ? ((g - b) / d) % 6
+              : cMax === g
+                ? (b - r) / d + 2
+                : cMax === b
+                  ? (r - g) / d + 4
+                  : 0;
 
     return {
         h: normalizeAngle(h * 60),
-        S: d ? d / (1 - abs(2 * L - 1)) : 0,
-        L,
+        s: d ? (d * 100) / (1 - abs(2 * l - 1)) : 0,
+        l: l * 100,
         a,
     };
 };

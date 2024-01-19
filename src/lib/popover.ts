@@ -1,8 +1,13 @@
 import { KEY_DOWN, POINTER_DOWN, RESIZE, ROOT, SCROLL } from '../constants';
-import type { Popover, popoverAutoUpdate, popoverFlipOrder, popoverOptions } from '../types';
+import type {
+    Popover,
+    popoverAutoUpdate,
+    popoverFlipOrder,
+    popoverOptions,
+} from '../types';
 import { getBounds, getOverflowAncestors, translate } from '../utils/dom';
-import { isString, isset } from '../utils/is';
-import { abs, float, isNumeric, round } from '../utils/math';
+import { isNumber, isString, isset } from '../utils/is';
+import { abs, round } from '../utils/math';
 
 // Side indexes. these indexes are chosen from the array output of,
 // getBounds function array.
@@ -47,15 +52,13 @@ export const createPopover = (
     container: HTMLElement,
     { margin = 0, position }: popoverOptions,
     autoUpdate: popoverAutoUpdate,
-    accessibility: EventListenerOrEventListenerObject
+    accessibility: EventListenerOrEventListenerObject,
 ): Popover => {
-    if (isString(margin)) {
-        margin = float(margin);
-    }
-    margin = isNumeric(margin) ? margin : 0;
+    margin = isNumber(margin) ? +margin : 0;
     const [side, alignment] = isString(position) ? position.split('-') : [];
     const sidesFlipOrder = fallbackSides[side] || fallbackSides.bottom;
-    const alignmentsFlipOrder = fallbackAlignments[alignment] || fallbackAlignments.center;
+    const alignmentsFlipOrder =
+        fallbackAlignments[alignment] || fallbackAlignments.center;
     const overflowAncestors = getOverflowAncestors(target);
 
     /**
@@ -88,7 +91,8 @@ export const createPopover = (
                 // Calculate coordinate to set this side.
                 // side <= 1 means side is either TOP or LEFT.
                 // otherwise it's BOTTOM or RIGHT.
-                coordinates[axis] = targetSide + (side <= 1 ? -requiredSpace : margin);
+                coordinates[axis] =
+                    targetSide + (side <= 1 ? -requiredSpace : margin);
                 // Reverse the axis for the alignments.
                 // x (0) => y (1)
                 // y (1) => x (0)
@@ -101,16 +105,21 @@ export const createPopover = (
                 const targetUpperBound = targetBounds[axis + 4];
                 // Distance between the document upper bound (BOTTOM or RIGHT) and,
                 // the target element lower bound (TOP or LEFT).
-                const upperBoundDistance = visualViewport[axis + 4] - targetLowerBound;
+                const upperBoundDistance =
+                    visualViewport[axis + 4] - targetLowerBound;
                 // Offset between the container and the reference element.
-                const offset = (containerDimension + targetBounds[axis + 2]) / 2;
+                const offset =
+                    (containerDimension + targetBounds[axis + 2]) / 2;
 
                 /**
                  * Check alignments, only if the container is attached to one side.
                  */
                 alignmentsFlipOrder.some((alignment) => {
                     // Check space, if it's available then align the container.
-                    if (alignment === START && containerDimension <= upperBoundDistance) {
+                    if (
+                        alignment === START &&
+                        containerDimension <= upperBoundDistance
+                    ) {
                         coordinates[axis] = targetLowerBound;
                         return true;
                     }
@@ -122,8 +131,12 @@ export const createPopover = (
                         coordinates[axis] = targetUpperBound - offset;
                         return true;
                     }
-                    if (alignment === END && containerDimension <= targetUpperBound) {
-                        coordinates[axis] = targetUpperBound - containerDimension;
+                    if (
+                        alignment === END &&
+                        containerDimension <= targetUpperBound
+                    ) {
+                        coordinates[axis] =
+                            targetUpperBound - containerDimension;
                         return true;
                     }
                     return false;
@@ -143,9 +156,11 @@ export const createPopover = (
                 round(
                     isset(value)
                         ? value
-                        : (visualViewport[axis + 4] - containerBounds[axis + 2]) / 2
-                )
-            ) as [x: number, y: number])
+                        : (visualViewport[axis + 4] -
+                              containerBounds[axis + 2]) /
+                              2,
+                ),
+            ) as [x: number, y: number]),
         );
     };
 
@@ -155,10 +170,14 @@ export const createPopover = (
     const isVisible = () => {
         return overflowAncestors.every((ancestor) => {
             const [x, y, , , right, bottom] = getBounds(target);
-            const [ancestorX, ancestorY, , , ancestorRight, ancestorBottom] = getBounds(ancestor);
+            const [ancestorX, ancestorY, , , ancestorRight, ancestorBottom] =
+                getBounds(ancestor);
 
             return (
-                y < ancestorBottom && bottom > ancestorY && x < ancestorRight && right > ancestorX
+                y < ancestorBottom &&
+                bottom > ancestorY &&
+                x < ancestorRight &&
+                right > ancestorX
             );
         });
     };
@@ -173,7 +192,9 @@ export const createPopover = (
     /**
      * Attach/Detach popover event listeners.
      */
-    const popoverEvents = (method: 'addEventListener' | 'removeEventListener') => {
+    const popoverEvents = (
+        method: 'addEventListener' | 'removeEventListener',
+    ) => {
         overflowAncestors.forEach((ancestor) => {
             ancestor[method](SCROLL, eventHandler);
         });

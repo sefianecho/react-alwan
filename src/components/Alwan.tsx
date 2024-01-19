@@ -17,7 +17,6 @@ import type {
     colorState,
     colorUpdater,
     colorUpdaterFromValue,
-    internalHSL,
     popoverAutoUpdate,
 } from '../types';
 import {
@@ -34,6 +33,7 @@ import { HSLToRGB, RGBToHEX, RGBToHSL } from '../colors/converter';
 import { stringify } from '../colors/stringify';
 import { parseColor } from '../colors/parser';
 import Button from './Button';
+import { merge } from '../utils/object';
 
 const Alwan = ({
     id,
@@ -72,18 +72,15 @@ const Alwan = ({
         s: 0,
         l: 0,
 
-        S: 0,
-        L: 0,
-
         r: 0,
         g: 0,
         b: 0,
+
         a: 1,
 
         rgb: '',
         hsl: '',
         hex: '',
-        opaque: '',
     });
 
     /**
@@ -95,45 +92,31 @@ const Alwan = ({
      * @param rgb - RGB color.
      */
     const update: colorUpdater = useCallback(
-        (hsl, source, updateAll = false, rgb) => {
-            if (!disabled) {
-                updatePalette.current = updateAll;
+        (hsl, triggerChange = true, updateAll = false, rgb) => {
+            updatePalette.current = updateAll;
 
-                setColor((color) => {
-                    const { r, g, b, a } = color;
+            setColor((color) => {
+                const previousHex = color.hex;
 
-                    color = { ...color, ...hsl };
-                    color = {
-                        ...color,
-                        s: round(color.S * 100),
-                        l: round(color.L * 100),
-                        ...(rgb || HSLToRGB(color)),
-                    };
+                merge(color, hsl);
+                merge(
+                    color,
+                    { s: round(color.s), l: round(color.l) },
+                    rgb || HSLToRGB(color),
+                );
 
-                    const [opaque, alphaHex] = RGBToHEX(color);
+                color.rgb = stringify(color, RGB_FORMAT);
+                color.hsl = stringify(color, HSL_FORMAT);
+                color.hex = RGBToHEX(color);
 
-                    color.rgb = stringify(color, RGB_FORMAT);
-                    color.hsl = stringify(color, HSL_FORMAT);
-                    color.hex = opaque + alphaHex;
-                    color.opaque = opaque;
+                if (onChange && triggerChange && color.hex !== previousHex) {
+                    onChange(event(color, 'change'));
+                }
 
-                    // Fire onChange if at least one of the rgba components changes.
-                    if (
-                        source &&
-                        onChange &&
-                        (color.r !== r ||
-                            color.g !== g ||
-                            color.b !== b ||
-                            color.a !== a)
-                    ) {
-                        onChange(event(color, 'change', source));
-                    }
-
-                    return color;
-                });
-            }
+                return { ...color };
+            });
         },
-        [disabled, onChange],
+        [onChange],
     );
 
     /**
@@ -141,25 +124,10 @@ const Alwan = ({
      *
      * @param color - color state.
      * @param type - Event type.
-     * @param source - Event source.
      */
-    const event = (
-        color: colorState,
-        type: alwanEventType,
-        source?: HTMLElement,
-    ): alwanEvent => ({
+    const event = (color: colorState, type: alwanEventType): alwanEvent => ({
         type,
-        source,
-        h: color.h,
-        s: color.s,
-        l: color.l,
-        r: color.r,
-        g: color.g,
-        b: color.b,
-        a: color.a,
-        rgb: color.rgb,
-        hsl: color.hsl,
-        hex: color.hex,
+        ...color,
     });
 
     /**
@@ -169,23 +137,23 @@ const Alwan = ({
      * @param source - Element that updating the color.
      */
     const updateFromValue: colorUpdaterFromValue = useCallback(
-        (value, source) => {
+        (value, triggerChange = true) => {
             const [parsedColor, format] = parseColor(value) as [
-                color: RGBA | (internalHSL & HSLA),
+                color: RGBA | HSLA,
                 format: colorFormat,
             ];
 
             let rgb: RGBA | undefined;
-            let hsl: (internalHSL & HSLA) | internalHSL;
+            let hsl: HSLA;
 
             if (format === RGB_FORMAT) {
                 rgb = parsedColor as RGBA;
                 hsl = RGBToHSL(rgb);
             } else {
-                hsl = parsedColor as internalHSL & HSLA;
+                hsl = parsedColor as HSLA;
             }
 
-            update(hsl, source, true, rgb);
+            update(hsl, triggerChange, true, rgb);
         },
         [update],
     );
@@ -234,8 +202,7 @@ const Alwan = ({
                 <Utility
                     preview={preview}
                     copy={copy}
-                    color={color}
-                    format={currentFormat}
+                    color={color[format]}
                     disabled={disabled}
                 />
                 <Sliders
@@ -408,7 +375,7 @@ const Alwan = ({
      * Update color from value Prop.
      */
     useEffect(() => {
-        updateFromValue(value);
+        updateFromValue(value, false);
     }, [updateFromValue, value]);
 
     /**

@@ -208,17 +208,7 @@ export interface HSL {
 
 export interface HSLA extends HSL, A {}
 
-export interface colorState extends RGBA, HSL {
-    /**
-     * Saturation used internally its value is between 0-1.
-     */
-    S: number;
-
-    /**
-     * Lightness used internally its value is between 0-1.
-     */
-    L: number;
-
+export interface colorState extends RGB, HSL, A {
     /**
      * RGB color string.
      */
@@ -233,15 +223,12 @@ export interface colorState extends RGBA, HSL {
      * Hex color.
      */
     hex: string;
-
-    /**
-     * Hex color without opacity.
-     */
-    opaque: string;
 }
 
 export type inputValues = {
-    [P in keyof colorState]: colorState[P] extends number ? number | string : string;
+    [P in keyof colorState]: colorState[P] extends number
+        ? number | string
+        : string;
 };
 
 export type Color = string | RGB | RGBA | HSL | HSLA;
@@ -252,7 +239,7 @@ export type DOMRectArray = [
     width: number,
     height: number,
     right: number,
-    bottom: number
+    bottom: number,
 ];
 
 export interface paletteProps {
@@ -266,10 +253,9 @@ export interface paletteProps {
 }
 
 export interface utilityProps {
-    color: colorState;
+    color: string;
     copy: boolean;
     preview: boolean;
-    format: colorFormat;
     disabled: boolean;
 }
 
@@ -306,30 +292,27 @@ export interface popoverOptions {
 export interface popoverFlipOrder {
     [key: string]: number[];
 }
-export type popoverAutoUpdate = (update: () => void, isInViewport: () => boolean) => void;
+export type popoverAutoUpdate = (
+    update: () => void,
+    isInViewport: () => boolean,
+) => void;
 export interface Popover {
     isVisible(): boolean;
     destroy(): void;
 }
-export interface internalHSL {
-    h?: number;
-    S?: number;
-    L?: number;
-    a?: number;
-}
+
 export type colorUpdater = (
-    hsl: internalHSL,
-    source?: HTMLElement,
+    hsl: Partial<HSLA>,
+    triggerChange?: boolean,
     updateAll?: boolean,
-    rgb?: RGBA
+    rgb?: RGBA,
 ) => void;
-export type colorUpdaterFromValue = (value: Color, source?: HTMLElement) => void;
+export type colorUpdaterFromValue = (
+    value: Color,
+    triggerChange?: boolean,
+) => void;
 
 export type alwanEventType = 'change' | 'open' | 'close';
-export interface alwanEvent extends Readonly<RGBA>, Readonly<HSL> {
+export interface alwanEvent extends Readonly<colorState> {
     readonly type: alwanEventType;
-    readonly source: HTMLElement | undefined;
-    readonly rgb: string;
-    readonly hsl: string;
-    readonly hex: string;
 }

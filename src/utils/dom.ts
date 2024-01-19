@@ -8,14 +8,20 @@ import type { DOMRectArray } from '../types';
  * @returns
  */
 export const getBounds = (element: Element | Document): DOMRectArray => {
-    let x: number, y: number, width: number, height: number, right: number, bottom: number;
+    let x: number,
+        y: number,
+        width: number,
+        height: number,
+        right: number,
+        bottom: number;
 
     if (element instanceof Document) {
         x = y = 0;
         width = right = DOC_ELEMENT.clientWidth;
         height = bottom = DOC_ELEMENT.clientHeight;
     } else {
-        ({ x, y, width, height, right, bottom } = element.getBoundingClientRect());
+        ({ x, y, width, height, right, bottom } =
+            element.getBoundingClientRect());
     }
 
     return [x, y, width, height, right, bottom];
@@ -41,7 +47,7 @@ export const translate = (element: HTMLElement, x: number, y: number) => {
  */
 export const getOverflowAncestors = (
     element: Element | null,
-    ancestors: Array<Document | Element> = [ROOT]
+    ancestors: Array<Document | Element> = [ROOT],
 ): Array<Document | Element> => {
     element = element && element.parentElement;
 
@@ -49,9 +55,26 @@ export const getOverflowAncestors = (
         return ancestors;
     }
 
-    if (/auto|scroll|overlay|clip|hidden/.test(getComputedStyle(element).overflow)) {
+    if (
+        /auto|scroll|overlay|clip|hidden/.test(
+            getComputedStyle(element).overflow,
+        )
+    ) {
         ancestors.push(element);
     }
 
     return getOverflowAncestors(element, ancestors);
 };
+
+/**
+ * Adds/Removes a class from an element.
+ *
+ * @param element - HTML element.
+ * @param token - classname.
+ * @param forced - if included add/remove, toggle otherwise.
+ */
+export const toggleClassName = (
+    element: Element,
+    token: string,
+    forced?: boolean,
+) => element.classList.toggle(token, forced);

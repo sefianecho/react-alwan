@@ -1,14 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-    KEYBOARD_X,
-    KEYBOARD_Y,
-    POINTER_MOVE,
-    POINTER_UP,
-    ROOT,
-} from '../constants';
-import { getBounds, translate } from '../utils/dom';
+import { useCallback, useEffect, useRef } from 'react';
+import { DOC_ELEMENT, KEYBOARD_X, KEYBOARD_Y, ROOT } from '../constants';
+import { getBounds, toggleClassName, translate } from '../utils/dom';
 import { boundNumber, min } from '../utils/math';
-import { createPortal } from 'react-dom';
 import type { paletteProps } from '../types';
 
 /**
@@ -18,8 +11,6 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
     const paletteElement = useRef<HTMLDivElement>(null);
     const markerElement = useRef<HTMLDivElement>(null);
     const markerPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-
-    const [isPointerDown, setPointerDown] = useState(false);
 
     /**
      * Moves marker and update color state.
@@ -32,7 +23,6 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
             const { x: markerX, y: markerY } = markerPosition.current;
             const palette = paletteElement.current as HTMLDivElement;
             let [x, y, width, height] = getBounds(palette);
-            let v: number, L: number;
 
             if (e) {
                 x = e.clientX - x;
@@ -44,25 +34,40 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
 
             x = boundNumber(x, width);
             y = boundNumber(y, height);
+            markerPosition.current = { x, y };
+            translate(markerElement.current as HTMLDivElement, x, y);
 
-            if (x !== markerX || y !== markerY) {
-                markerPosition.current = { x, y };
-                translate(markerElement.current as HTMLDivElement, x, y);
+            const v = 1 - y / height;
+            const l = v * (1 - x / (2 * width));
 
-                v = 1 - y / height;
-                L = v * (1 - x / (2 * width));
-
-                updater(
-                    {
-                        S: L === 1 || L === 0 ? 0 : (v - L) / min(L, 1 - L),
-                        L,
-                    },
-                    palette,
-                );
-            }
+            updater({
+                s: (l === 1 || l === 0 ? 0 : (v - l) / min(l, 1 - l)) * 100,
+                l: l * 100,
+            });
         },
         [updater],
     );
+
+    /**
+     * Handles drag move.
+     *
+     * @param e - Pointermove
+     */
+    const dragMove = (e: PointerEvent) => {
+        if (e.buttons) {
+            moveMarkerAndUpdateColor(e);
+        } else {
+            dragEnd();
+        }
+    };
+
+    /**
+     * Handles drag end (release).
+     */
+    const dragEnd = () => {
+        toggleClassName(DOC_ELEMENT, 'alwan__backdrop', false);
+        ROOT.removeEventListener('pointermove', dragMove);
+    };
 
     /**
      * Moves marker using keyboard arrow keys.
@@ -87,55 +92,26 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
      */
     const dragStart: React.PointerEventHandler<HTMLDivElement> = (e) => {
         if (!disabled) {
-            setPointerDown(true);
             moveMarkerAndUpdateColor(e);
+            toggleClassName(DOC_ELEMENT, 'alwan__backdrop', true);
+            ROOT.addEventListener('pointermove', dragMove);
+            ROOT.addEventListener('pointerup', dragEnd, { once: true });
         }
     };
-
-    /**
-     * Drag marker.
-     */
-    useEffect(() => {
-        /**
-         * Dragging the marker.
-         *
-         * @param e - Event.
-         */
-        const dragMove = (e: PointerEvent) => {
-            if (isPointerDown) {
-                moveMarkerAndUpdateColor(e);
-            }
-        };
-
-        /**
-         * Drag end (released the marker)
-         */
-        const dragEnd = () => {
-            if (isPointerDown) {
-                setPointerDown(false);
-            }
-        };
-
-        ROOT.addEventListener(POINTER_MOVE, dragMove);
-        ROOT.addEventListener(POINTER_UP, dragEnd);
-
-        return () => {
-            ROOT.removeEventListener(POINTER_MOVE, dragMove);
-            ROOT.removeEventListener(POINTER_UP, dragEnd);
-        };
-    });
 
     /**
      * Update marker's position from color state.
      */
     useEffect(() => {
         if (canUpdate) {
+            let { s, l } = color;
+            s /= 100;
+            l /= 100;
             const [, , width, height] = getBounds(
                 paletteElement.current as HTMLDivElement,
             );
-            const { S, L } = color;
-            const v = L + S * min(L, 1 - L);
-            const x = (v ? 2 * (1 - L / v) : 0) * width;
+            const v = l + s * min(l, 1 - l);
+            const x = (v ? 2 * (1 - l / v) : 0) * width;
             const y = (1 - v) * height;
 
             markerPosition.current = { x, y };
@@ -144,24 +120,16 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
     }, [canUpdate, color]);
 
     return (
-        <>
-            <div
-                className='alwan__palette'
-                tabIndex={0}
-                onPointerDown={dragStart}
-                onKeyDown={handleKeyboard}
-                ref={paletteElement}
-                style={{ '--h': color.h } as React.CSSProperties}
-            >
-                <div className='alwan__marker' ref={markerElement}></div>
-            </div>
-            {isPointerDown
-                ? createPortal(
-                      <div className='alwan__backdrop'></div>,
-                      ROOT.body,
-                  )
-                : null}
-        </>
+        <div
+            className='alwan__palette'
+            tabIndex={0}
+            onPointerDown={dragStart}
+            onKeyDown={handleKeyboard}
+            ref={paletteElement}
+            style={{ '--h': color.h } as React.CSSProperties}
+        >
+            <div className='alwan__marker' ref={markerElement}></div>
+        </div>
     );
 };
 

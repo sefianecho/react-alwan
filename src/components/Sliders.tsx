@@ -9,28 +9,6 @@ import Slider from './Slider';
  */
 const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
     /**
-     * Updates color state.
-     *
-     * @param param0 - Event.
-     * @param channel - Color channel.
-     */
-    const handleChange = (
-        {
-            target,
-            target: { valueAsNumber },
-        }: React.ChangeEvent<HTMLInputElement>,
-        channel: 'h' | 'a',
-    ) => {
-        updater(
-            {
-                [channel]:
-                    channel === 'h' ? 360 - valueAsNumber : valueAsNumber,
-            },
-            target,
-        );
-    };
-
-    /**
      * Resets the alpha component to 1, if the opacity prop changed to false.
      */
     useEffect(() => {
@@ -44,8 +22,8 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
             <Slider
                 type='hue'
                 max={360}
-                value={360 - color.h}
-                onChange={(e) => handleChange(e, 'h')}
+                value={color.h}
+                onChange={(e) => updater({ h: +e.currentTarget.value })}
                 disabled={disabled}
             />
             {opacity ? (
@@ -54,7 +32,7 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
                     value={color.a}
                     max={1}
                     step={0.01}
-                    onChange={(e) => handleChange(e, 'a')}
+                    onChange={(e) => updater({ a: +e.currentTarget.value })}
                     disabled={disabled}
                 />
             ) : null}
