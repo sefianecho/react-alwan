@@ -21,6 +21,7 @@ const Inputs = ({
     changeFormat,
     disabled,
     close,
+    i18n,
 }: inputsProps) => {
     /**
      * Gets fields to build.
@@ -95,6 +96,8 @@ const Inputs = ({
                                 formats[(formats.indexOf(format) + 1) % length],
                             );
                         }}
+                        aria-label={i18n}
+                        title={i18n}
                         disabled={disabled}
                     >
                         {switchInputsSVG}

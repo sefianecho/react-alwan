@@ -7,7 +7,13 @@ import type { paletteProps } from '../types';
 /**
  * Color picking area. pick color by dragging the marker (picker).
  */
-const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
+const Palette = ({
+    updater,
+    color,
+    canUpdate,
+    disabled,
+    i18n,
+}: paletteProps) => {
     const paletteElement = useRef<HTMLDivElement>(null);
     const markerElement = useRef<HTMLDivElement>(null);
     const markerPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -127,6 +133,7 @@ const Palette = ({ updater, color, canUpdate, disabled }: paletteProps) => {
             onKeyDown={handleKeyboard}
             ref={paletteElement}
             style={{ '--h': color.h } as React.CSSProperties}
+            aria-label={i18n}
         >
             <div className='alwan__marker' ref={markerElement}></div>
         </div>

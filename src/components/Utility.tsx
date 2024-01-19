@@ -10,7 +10,7 @@ import Button from './Button';
  *
  * @param param0 - Props.
  */
-const Utility = ({ preview, copy, color, disabled }: utilityProps) => {
+const Utility = ({ preview, copy, color, disabled, i18n }: utilityProps) => {
     const [isCopied, setCopied] = useState(false);
     const [isFallback, setFallback] = useState(false);
     const fallbackInput = useRef<HTMLInputElement | null>(null);
@@ -55,6 +55,8 @@ const Utility = ({ preview, copy, color, disabled }: utilityProps) => {
                 setCopied(false);
                 e.currentTarget.blur();
             }}
+            aria-label={i18n}
+            title={i18n}
         >
             {isCopied ? checkSVG : clipboardSVG}
         </Button>

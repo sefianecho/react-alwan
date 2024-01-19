@@ -31,3 +31,13 @@ export const HSL_FORMAT: colorFormat = 'hsl';
 export const HEX_FORMAT: colorFormat = 'hex';
 
 export const ALL_FORMATS: colorFormat[] = [RGB_FORMAT, HSL_FORMAT, HEX_FORMAT];
+
+export const I18N_DEFAULTS = {
+    palette: 'Color picker',
+    copyBtn: 'Copy color to clipboard',
+    changeFormatBtn: 'Change color format',
+    swatchBtn: 'Color swatch',
+    toggleSwatchesBtn: 'Toggle swatches',
+    hueSlider: 'Change hue',
+    alphaSlider: 'Change opacity',
+};

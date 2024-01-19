@@ -3,13 +3,20 @@ import { caretSVG } from '../assets/svg/icons';
 import type { swatchesProps } from '../types';
 import Button from './Button';
 import { parseColor } from '../colors/parser';
+import { isString } from '../utils/is';
 
 /**
  * Creates color swatches buttons.
  *
  * @param param0 - Props.
  */
-const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
+const Swatches = ({
+    swatches,
+    toggle,
+    updater,
+    disabled,
+    i18n: { swatches: swatchLabel, toggle: toggleButtonLabel },
+}: swatchesProps) => {
     const [collapsed, setCollapsed] = useState(false);
 
     /**
@@ -36,6 +43,12 @@ const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
                             }
                             onClick={() => updater(swatch)}
                             disabled={disabled}
+                            aria-label={swatchLabel}
+                            title={
+                                isString(swatch)
+                                    ? swatch
+                                    : (parseColor(swatch, true) as string)
+                            }
                         />
                     ))}
                 </div>
@@ -49,6 +62,8 @@ const Swatches = ({ swatches, toggle, updater, disabled }: swatchesProps) => {
                             setCollapsed(!collapsed);
                         }}
                         disabled={disabled}
+                        aria-label={toggleButtonLabel}
+                        title={toggleButtonLabel}
                     >
                         {caretSVG}
                     </Button>

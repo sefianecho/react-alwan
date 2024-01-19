@@ -7,7 +7,7 @@ import Slider from './Slider';
  *
  * @param param0 - Props.
  */
-const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
+const Sliders = ({ opacity, updater, color, disabled, i18n }: slidersProps) => {
     /**
      * Resets the alpha component to 1, if the opacity prop changed to false.
      */
@@ -25,6 +25,7 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
                 value={color.h}
                 onChange={(e) => updater({ h: +e.currentTarget.value })}
                 disabled={disabled}
+                aria-label={i18n.hue}
             />
             {opacity ? (
                 <Slider
@@ -34,6 +35,7 @@ const Sliders = ({ opacity, updater, color, disabled }: slidersProps) => {
                     step={0.01}
                     onChange={(e) => updater({ a: +e.currentTarget.value })}
                     disabled={disabled}
+                    aria-label={i18n.alpha}
                 />
             ) : null}
         </div>

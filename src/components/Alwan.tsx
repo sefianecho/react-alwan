@@ -23,6 +23,7 @@ import {
     ALL_FORMATS,
     DEFAULT_COLOR,
     HSL_FORMAT,
+    I18N_DEFAULTS,
     RGB_FORMAT,
     ROOT,
 } from '../constants';
@@ -54,6 +55,7 @@ const Alwan = ({
     swatches = [],
     toggleSwatches = false,
     closeOnScroll = false,
+    i18n = {},
     onChange,
     onOpen,
     onClose,
@@ -158,6 +160,8 @@ const Alwan = ({
         [update],
     );
 
+    const I18N = merge({}, I18N_DEFAULTS, i18n);
+
     /**
      * Picker reference button.
      */
@@ -197,6 +201,7 @@ const Alwan = ({
                 color={color}
                 canUpdate={updatePalette.current}
                 disabled={disabled}
+                i18n={I18N.palette}
             />
             <Container>
                 <Utility
@@ -204,12 +209,17 @@ const Alwan = ({
                     copy={copy}
                     color={color[format]}
                     disabled={disabled}
+                    i18n={I18N.copyBtn}
                 />
                 <Sliders
                     opacity={opacity}
                     updater={update}
                     color={color}
                     disabled={disabled}
+                    i18n={{
+                        hue: I18N.hueSlider,
+                        alpha: I18N.alphaSlider,
+                    }}
                 />
             </Container>
             <Inputs
@@ -224,12 +234,17 @@ const Alwan = ({
                 close={() => {
                     toggle && setOpen(false);
                 }}
+                i18n={I18N.changeFormatBtn}
             />
             <Swatches
                 swatches={swatches}
                 toggle={toggleSwatches}
                 updater={updateFromValue}
                 disabled={disabled}
+                i18n={{
+                    swatches: I18N.swatchBtn,
+                    toggle: I18N.toggleSwatchesBtn,
+                }}
             />
         </div>
     );

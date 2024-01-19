@@ -142,6 +142,30 @@ export interface alwanProps {
     closeOnScroll?: boolean;
 
     /**
+     * Internationalization of the interactive elements labels.
+     *
+     * @default
+     * `{
+     *      palette: 'Color picker',
+     *      copyBtn: 'Copy color to clipboard',
+     *      changeFormatBtn: 'Change color format',
+     *      swatchBtn: 'Color swatch',
+     *      toggleSwatchesBtn: 'Toggle swatches',
+     *      hueSlider: 'Change hue',
+     *      alphaSlider: 'Change opacity',
+     * }`
+     */
+    i18n?: {
+        palette?: string;
+        copy?: string;
+        changeFormat?: string;
+        swatch?: string;
+        toggleSwatches?: string;
+        hue?: string;
+        alpha?: string;
+    };
+
+    /**
      * On Change event fires whenever the color changes.
      *
      * @default undefined;
@@ -250,6 +274,7 @@ export interface paletteProps {
      */
     canUpdate: boolean;
     disabled: boolean;
+    i18n: string;
 }
 
 export interface utilityProps {
@@ -257,6 +282,7 @@ export interface utilityProps {
     copy: boolean;
     preview: boolean;
     disabled: boolean;
+    i18n: string;
 }
 
 export interface slidersProps {
@@ -264,6 +290,10 @@ export interface slidersProps {
     updater: colorUpdater;
     color: colorState;
     disabled: boolean;
+    i18n: {
+        hue: string;
+        alpha: string;
+    };
 }
 
 export interface inputsProps {
@@ -276,6 +306,7 @@ export interface inputsProps {
     changeFormat: (format: colorFormat) => void;
     disabled: boolean;
     close(): void;
+    i18n: string;
 }
 
 export interface swatchesProps {
@@ -283,6 +314,10 @@ export interface swatchesProps {
     swatches: Color[];
     toggle: boolean;
     disabled: boolean;
+    i18n: {
+        swatches: string;
+        toggle: string;
+    };
 }
 
 export interface popoverOptions {
