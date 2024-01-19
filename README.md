@@ -114,6 +114,20 @@ function App() {
 -   `onOpen` (_default_ `undefined`) — On Open event fires whenever the color picker opens.
 -   `onClose` (_default_ `undefined`) — On Change event fired whenever the color picker closes.
 
+## Accessibility (v1.1)
+
+Unlabeled interactive elements has a ARIA label attribute with a default values in english. You can change these labels in the options by modifying the i18n object prop.
+```javascript
+  i18n: {
+    palette: 'Color picker', // Label for the color picking area.
+    copy: 'Copy color to clipboard', // Label & title for the copy button.
+    changeFormat: 'Change color format', // Label & title for the change format button.
+    swatch: 'Color swatch', // Label for swatch buttons.
+    toggleSwatches: 'Toggle swatches', // Label & title for the toggle swatches button.
+    hue: 'Change hue', // Label for the hue slider.
+    alpha: 'Change opacity' // Label for the opacity slider.
+}
+```
 ## Events
 
 ```javascript
@@ -122,7 +136,6 @@ function App() {
         onClose={(ev) => { /* ... */ }}
         onChange={(ev) => {
             ev.type // Event type `change`, `open` or `close`.
-            ev.source // Event source.
 
             // HSL color components.
             ev.h // Hue.
