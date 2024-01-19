@@ -20,6 +20,9 @@ const START = 0;
 const CENTER = 1;
 const END = 2;
 
+// Margin between the popover container and the document edges.
+const GAP = 3;
+
 /**
  * Sides to fallback to for each side.
  */
@@ -60,11 +63,13 @@ export const createPopover = (
     const alignmentsFlipOrder =
         fallbackAlignments[alignment] || fallbackAlignments.center;
     const overflowAncestors = getOverflowAncestors(target);
+    const containerStyle = container.style;
 
     /**
      * Updates the container's position.
      */
     const update = () => {
+        containerStyle.height = '';
         const visualViewport = getBounds(ROOT);
         const targetBounds = getBounds(target);
         const containerBounds = getBounds(container);
@@ -152,15 +157,26 @@ export const createPopover = (
         // for the alignment then center it horizontally/vertically depends on the side.
         translate(
             container,
-            ...(coordinates.map((value, axis) =>
-                round(
+            ...(coordinates.map((value, axis) => {
+                // Set custom height if the container height is greater than
+                // the viewport height.
+                if (
+                    axis &&
+                    value === null &&
+                    containerBounds[3] > visualViewport[5]
+                ) {
+                    containerStyle.height = visualViewport[5] - GAP * 2 + 'px';
+                    containerBounds[3] = visualViewport[5] - GAP;
+                }
+
+                return round(
                     isset(value)
                         ? value
                         : (visualViewport[axis + 4] -
                               containerBounds[axis + 2]) /
                               2,
-                ),
-            ) as [x: number, y: number]),
+                );
+            }) as [x: number, y: number]),
         );
     };
 
