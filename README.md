@@ -5,10 +5,10 @@ A simple, lightweight, customizable, touch friendly color picker for react libra
 &nbsp;&nbsp;&nbsp;
 
 <div align="center">
-  <img alt="alwan light theme" src="https://github.com/SofianChouaib/alwan/blob/main/images/alwan-light.png?raw=true">
+  <img alt="alwan light theme" src="https://github.com/SofianChouaib/react-alwan/blob/main/images/alwan-light.png?raw=true">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-  <img alt="alwan dark theme" src="https://github.com/SofianChouaib/alwan/blob/main/images/alwan-dark.png?raw=true">
+  <img alt="alwan dark theme" src="https://github.com/SofianChouaib/react-alwan/blob/main/images/alwan-dark.png?raw=true">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
