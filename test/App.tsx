@@ -39,7 +39,9 @@ const App = () => {
     });
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<
+            HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
+        >,
     ) => {
         const target = e.currentTarget;
         const { name, type, value } = target;
@@ -47,7 +49,9 @@ const App = () => {
         if (type === 'checkbox') {
             if (name === 'inputs') {
                 options.inputs = {
-                    ...(options.inputs as Partial<Record<colorFormat, boolean>>),
+                    ...(options.inputs as Partial<
+                        Record<colorFormat, boolean>
+                    >),
                     [value]: (target as HTMLInputElement).checked,
                 };
             } else {
@@ -56,12 +60,14 @@ const App = () => {
                 ] = (target as HTMLInputElement).checked;
             }
         } else if (type === 'textarea') {
-            options.swatches = value.split(', ');
+            options.swatches = value.split(';');
         } else {
-            (options as unknown as Record<keyof alwanProps, string>)[name as keyof alwanProps] =
-                value;
+            (options as unknown as Record<keyof alwanProps, string>)[
+                name as keyof alwanProps
+            ] = value;
         }
 
+        console.log(options.swatches);
         setOptions({ ...options });
     };
 
@@ -87,7 +93,11 @@ const App = () => {
                         <li>
                             <label>
                                 Theme
-                                <select name='theme' value={options.theme} onChange={handleChange}>
+                                <select
+                                    name='theme'
+                                    value={options.theme}
+                                    onChange={handleChange}
+                                >
                                     <option value='light'>Light</option>
                                     <option value='dark'>Dark</option>
                                 </select>
@@ -131,15 +141,23 @@ const App = () => {
                                     <option value='top-end'>Top-End</option>
 
                                     <option value='right'>Right</option>
-                                    <option value='right-start'>Right-Start</option>
+                                    <option value='right-start'>
+                                        Right-Start
+                                    </option>
                                     <option value='right-end'>Right-End</option>
 
                                     <option value='bottom'>Bottom</option>
-                                    <option value='bottom-start'>Bottom-Start</option>
-                                    <option value='bottom-end'>Bottom-End</option>
+                                    <option value='bottom-start'>
+                                        Bottom-Start
+                                    </option>
+                                    <option value='bottom-end'>
+                                        Bottom-End
+                                    </option>
 
                                     <option value='left'>Left</option>
-                                    <option value='left-start'>Left-Start</option>
+                                    <option value='left-start'>
+                                        Left-Start
+                                    </option>
                                     <option value='left-end'>Left-End</option>
                                 </select>
                             </label>
@@ -256,7 +274,12 @@ const App = () => {
                         <li>
                             <span>
                                 Inputs
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
                                     <label>
                                         RGB
                                         <input
@@ -313,9 +336,12 @@ const App = () => {
                                 Swatches
                                 <textarea
                                     name='swatches'
-                                    style={{ resize: 'vertical', marginLeft: 10 }}
+                                    style={{
+                                        resize: 'vertical',
+                                        marginLeft: 10,
+                                    }}
                                     onChange={handleChange}
-                                    value={options.swatches?.join(', ')}
+                                    value={options.swatches?.join(';')}
                                 ></textarea>
                             </label>
                         </li>

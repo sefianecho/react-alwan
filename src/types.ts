@@ -330,6 +330,7 @@ export interface popoverFlipOrder {
 export type popoverAutoUpdate = (
     update: () => void,
     isInViewport: () => boolean,
+    isScroll: boolean,
 ) => void;
 export interface Popover {
     isVisible(): boolean;

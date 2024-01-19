@@ -201,8 +201,8 @@ export const createPopover = (
     /**
      * Target overflow ancestors onScroll and window onResize event handler.
      */
-    const eventHandler = () => {
-        autoUpdate(update, isVisible);
+    const eventHandler = (e: Event) => {
+        autoUpdate(update, isVisible, e.type === 'scroll');
     };
 
     /**

@@ -198,7 +198,7 @@ const Alwan = ({
                 <Utility
                     preview={preview}
                     copy={copy}
-                    color={color[format]}
+                    color={color[currentFormat]}
                     disabled={disabled}
                     i18n={I18N.copyBtn}
                 />
@@ -245,12 +245,12 @@ const Alwan = ({
      * popover reference element scrolls or the window resizes.
      */
     const autoUpdate: popoverAutoUpdate = useCallback(
-        (update, isInViewport) => {
+        (update, isInViewport, isScroll) => {
             if (isOpen || !toggle) {
                 if (isInViewport()) {
                     if (isOpen) {
                         update();
-                        if (closeOnScroll && toggle) {
+                        if (isScroll && closeOnScroll && toggle) {
                             setOpen(false);
                         }
                     } else {
