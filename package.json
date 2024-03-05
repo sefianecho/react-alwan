@@ -52,10 +52,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SofianChouaib/react-alwan.git"
+        "url": "git+https://github.com/sefianecho/react-alwan.git"
     },
     "bugs": {
-        "url": "https://github.com/SofianChouaib/react-alwan/issues"
+        "url": "https://github.com/sefianecho/react-alwan/issues"
     },
-    "homepage": "https://github.com/SofianChouaib/react-alwan#readme"
+    "homepage": "https://github.com/sefianecho/react-alwan#readme"
 }
