@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => ({
                         return 'alwan.css';
                     },
                     globals: {
-                        react: 'React'
-                        'react-dom': 'ReactDOM'
+                        react: 'React',
+                        'react-dom': 'ReactDOM',
                     },
                 },
             },
