@@ -1,7 +1,7 @@
 {
     "name": "react-alwan",
     "description": "A simple lightweight, customizable touch friendly color picker",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "type": "module",
     "types": "./dist/alwan.d.ts",
     "main": "./dist/react-alwan.cjs.js",
