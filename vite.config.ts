@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
             },
             emptyOutDir: true,
             rollupOptions: {
-                external: ["react", "react-dom", "alwan"],
+                external: ["react", "react-dom"],
                 output: {
                     assetFileNames: "react-alwan.css",
                 },

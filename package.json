@@ -12,7 +12,7 @@
             "import": "./dist/react-alwan.es.js",
             "require": "./dist/react-alwan.cjs.js"
         },
-        "./dist/react-alwan.css": "./dist/react-alwan.css"
+        "./style.css": "./dist/react-alwan.css"
     },
     "scripts": {
         "dev": "vite",
