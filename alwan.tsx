@@ -9,7 +9,7 @@ interface AlwanProps {
     onColor?: alwanEventHandler;
     onOpen?: alwanEventHandler;
     onClose?: alwanEventHandler;
-    refEl?: ReactElement;
+    refEl?: ReactElement<{ ref?: React.Ref<HTMLElement> }>;
 }
 
 const Alwan = ({
@@ -20,7 +20,7 @@ const Alwan = ({
     onOpen,
     onClose
 }: AlwanProps) => {
-    const alwanRef = useRef<HTMLDivElement>(null);
+    const alwanRef = useRef(null);
 
     useEffect(() => {
         if (!alwanRef.current) {
