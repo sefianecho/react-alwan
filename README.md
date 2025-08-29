@@ -1,159 +1,82 @@
-# react-alwan
+# react-alwan (v2)
 
-A simple, lightweight, customizable, touch friendly color picker for react library.
+`react-alwan` is a React component wrapper for the [Alwan](https://github.com/sefianecho/alwan) color picker library. It allows you to easily integrate Alwan's color picker into React applications, providing a fully React-friendly API.
 
-&nbsp;&nbsp;&nbsp;
+## Installation
 
-<div align="center">
-  <img alt="alwan light theme" src="https://github.com/SofianChouaib/react-alwan/blob/main/images/alwan-light.png?raw=true">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-  <img alt="alwan dark theme" src="https://github.com/SofianChouaib/react-alwan/blob/main/images/alwan-dark.png?raw=true">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</div>
-
-&nbsp;&nbsp;&nbsp;
-
-## Features
-
--   Touch friendly.
--   Support dark theme.
--   Alpha channel (opacity).
--   Support 3 color formats hsl, rgb and hex.
--   Keyboard accessible.
--   Simple easy to use interface (inspired by google chrome's color picker).
--   No dependencies.
--   Copy color to the clipboard.
--   Lightweight.
-
-## Demo
-
-[Click here to try it](https://sofianchouaib.github.io/react-alwan/)
-
-## Getting started
-
-### Install using package manager
-
-```shell
+Install `react-alwan` via npm or yarn
+```sh
+# Using npm
 npm install react-alwan
-```
 
-or
-
-```
+# Using yarn
 yarn add react-alwan
 ```
-
-### Direct Link
-
--   Jsdelivr CDN
-
-```html
-<!-- Style -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-alwan/dist/alwan.css" />
-
-<!-- Script -->
-<script src="https://cdn.jsdelivr.net/npm/react-alwan/dist/umd/react-alwan.js"></script>
-```
-
--   Unpkg CDN
-
-```html
-<!-- Style -->
-<link rel="stylesheet" href="https://unpkg.com/react-alwan/dist/alwan.css" />
-
-<!-- Script -->
-<script src="https://unpkg.com/react-alwan/dist/umd/react-alwan.js"></script>
-```
-
 ## Usage
 
-```javascript
-// Import javascript.
+```typescript
+import React from 'react';
 import Alwan from 'react-alwan';
-// Import css.
-import 'react-alwan/dist/alwan.css';
+import 'react-alwan/style.css';
 
 function App() {
-    return (
-        <>
-            <Alwan />
-        </>
-    );
+  return <Alwan onChange={(color) => console.log(color)} />;
 }
+
+export default App;
 ```
+> **Note:** For older Node versions that don’t fully support the "exports" field, you may need to import the CSS directly from the original package:
+> ```typescript
+> import 'alwan/dist/css/alwan.min.css';
+> import Alwan from 'react-alwan';
+> ```
 
 ## Props
 
--   `id` (_default_ `''`) — Set the color picker Id.
--   `classname` (_default_ `''`) — Add classes to the reference button.
--   `theme` (_default_ `light`) — Choose a theme, 'dark' or 'light'.
--   `toggle` (_default_ `true`) — Toggle picker's visibility (Show/Hide), Setting this to false keeps the picker visible.
--   `popover` (_default_ `true`) — Display the picker container as a pop-up (a box that floats on top of the page content), if it's false, picker container will be displayed as a block (embedded in the page's content).
--   `position` (_default_ `bottom-start`) — Set the position of the popper (if popover is set to true) relative to the reference element, the position has two values separated by a dash (-), the first value is the direction (top, bottom, right, left), the second value is the alignment (start, center, end), omitting this value will default to center.
+- **`options`**: Same as the `options` in the [Alwan library](https://github.com/sefianecho/alwan?tab=readme-ov-file#options).
+You can pass any configuration supported by Alwan through this prop.
 
-    e.g. 'bottom-start': 'bottom' places the picker below the reference element, and 'start' aligns the left side of the container with the left side of the reference element.
+Example:
 
-    Note:
-    If the picker container has no space to be placed, it will auto-position itself.
-    based on the available space.
+```tsx
+import Alwan from "react-alwan";
+import "react-alwan/style.css"
 
--   `margin` (_default_ `0`) — Set the gap (in pixels) between the picker container and the reference element.
--   `preview` (_default_ `true`) — Preview the color.
--   `copy` (_default_ `true`) — Add/Remove a copy button.
--   `opacity` (_default_ `true`) — Support alpha channel and display opacity slider.
--   `disabled` (_default_ `false`) — Disable the picker, users won't be able to pick colors.
--   `value` (_default_ `#000`) — Color picker value.
--   `singleInput` (_default_ `false`) — For the formats 'hsl' and 'rgb', choose a single input to display the color string, or if false, display an input for each color component.
--   `inputs` (_default_ `true`) — Input(s) field(s) for each color format. if this option is set to true then all formats are selected.
--   `format` (_default_ `rgb`) — Initial color format.
--   `swatches` (_default_ `[]`) — Array of color swatches, invalid values will be displayed as rgb(0, 0, 0).
--   `toggleSwatches` (_default_ `false`) — Make swatches container collapsible.
--   `closeOnScroll` (_default_ `false`) — Close the color picker when scrolling.
--   `onChange` (_default_ `undefined`) — On Change event fires whenever the color changes.
--   `onOpen` (_default_ `undefined`) — On Open event fires whenever the color picker opens.
--   `onClose` (_default_ `undefined`) — On Change event fired whenever the color picker closes.
-
-## Accessibility (v1.1)
-
-Unlabeled interactive elements has a ARIA label attribute with a default values in english. You can change these labels in the options by modifying the i18n object prop.
-```javascript
-  i18n: {
-    palette: 'Color picker', // Label for the color picking area.
-    copy: 'Copy color to clipboard', // Label & title for the copy button.
-    changeFormat: 'Change color format', // Label & title for the change format button.
-    swatch: 'Color swatch', // Label for swatch buttons.
-    toggleSwatches: 'Toggle swatches', // Label & title for the toggle swatches button.
-    hue: 'Change hue', // Label for the hue slider.
-    alpha: 'Change opacity' // Label for the opacity slider.
+export default function App() {
+  return <Alwan options={{ theme: "dark", default: "#ff0000" }} />;
 }
 ```
-## Events
+- **Events callbacks: `onChange`, `onColor`, `onOpen` and `onClose`**
 
-```javascript
+`react-alwan` provides React-style props that map directly to the event handlers in the [Alwan](https://github.com/sefianecho/alwan) library.  
+Each callback receives an **event object** as its argument, described [here](https://github.com/sefianecho/alwan#event-object-since-v13).
+
+| Prop          | Alwan event   | Description                              |
+|---------------|---------------|------------------------------------------|
+| `onChange`    | `change`      | called when color changes                |
+| `onColor`     | `color`       | called continuously as the color changes |
+| `onOpen`      | `open`        | called when the color picker is opened   |
+| `onClose`     | `close`       | called when the color picker is closed   |
+
+### Example
+
+```tsx
+import Alwan from "react-alwan";
+import "react-alwan/style.css"
+
+export default function App() {
+  return (
     <Alwan
-        onOpen={(ev) => { /* ... */ }}
-        onClose={(ev) => { /* ... */ }}
-        onChange={(ev) => {
-            ev.type // Event type `change`, `open` or `close`.
-
-            // HSL color components.
-            ev.h // Hue.
-            ev.s // Saturation.
-            ev.l // Lightness.
-
-            // RGB color components.
-            ev.r // Red.
-            ev.g // Green.
-            ev.b // Blue.
-
-            ev.a // Alpha (opacity)
-
-            // Color string values.
-            ev.hex // Hex value.
-            ev.rgb // RGB string.
-            ev.hsl // HSL string.
-        }}
-    >
-
+      options={{ theme: "dark" }}
+      onChange={(ev) => console.log("Color changed:", ev.rgb)}
+      onOpen={(ev) => console.log("Picker opened")}
+      onClose={(ev) => console.log("Picker closed")}
+    />
+  );
+}
 ```
+
+- **refEl**
+
+The `refEl` prop is a **React element** used as the reference element for the color picker when the `preset` option is set to `false`.  
+If `refEl` is not provided (or if `preset: true`), React-Alwan renders its own pre-styled button as the reference element.
