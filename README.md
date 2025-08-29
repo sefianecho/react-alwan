@@ -1,6 +1,9 @@
 # react-alwan (v2)
 
-`react-alwan` is a React component wrapper for the [Alwan](https://github.com/sefianecho/alwan) color picker library. It allows you to easily integrate Alwan's color picker into React applications, providing a fully React-friendly API.
+`react-alwan` is a React component wrapper for the [Alwan](https://github.com/sefianecho/alwan) color picker library.  
+It lets you seamlessly integrate Alwan into React applications with a fully React-friendly API.  
+
+⚡ **Version 2** — a complete rewrite that now builds directly on the core Alwan library, instead of a React-only implementation.
 
 ## Installation
 
