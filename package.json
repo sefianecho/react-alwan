@@ -32,22 +32,23 @@
         "widget"
     ],
     "peerDependencies": {
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
     },
     "author": "Sefiane Chouaib",
     "license": "MIT",
     "devDependencies": {
-        "@types/node": "^20.3.1",
-        "@types/react": "^18.0.37",
-        "@types/react-dom": "^18.0.11",
+        "@types/node": "^20.19.11",
+        "@types/react": "^19.1.12",
         "@typescript-eslint/eslint-plugin": "^5.59.0",
         "@typescript-eslint/parser": "^5.59.0",
         "@vitejs/plugin-react": "^4.0.0",
         "eslint": "^8.38.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
-        "typescript": "^5.0.2",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
+        "typescript": "^5.9.2",
         "vite": "^7.1.3",
         "vite-plugin-dts": "^2.3.0"
     },
